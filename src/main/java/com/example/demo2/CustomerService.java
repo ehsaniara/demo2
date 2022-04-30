@@ -1,19 +1,8 @@
 package com.example.demo2;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+public interface CustomerService {
 
-@Service
-@AllArgsConstructor
-public class CustomerService {
+    CustomerEntity createCustomer(String name);
 
-    private final CustomerRepository customerRepository;
-
-    public CustomerEntity createCustomer(String name) {
-        return customerRepository.save(CustomerEntity.builder().customerName(name).build());
-    }
-
-    public String greeting(String name) {
-        return String.format("Hello %s!", name);
-    }
+    String greeting(String name);
 }
