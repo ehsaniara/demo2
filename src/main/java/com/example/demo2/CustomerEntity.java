@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "customers")
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerEntity {
+public class CustomerEntity extends EntityAudit {
 
     @Id
     @GeneratedValue

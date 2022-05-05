@@ -11,6 +11,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,7 @@ class CustomerRepositoryContainerTest {
     @Test
     void testCreateCustomer() {
         var customerEntity = CustomerEntity.builder().customerName("Jay").build();
+        customerEntity.setCreateDate(Instant.now());
 
         customerRepository.save(customerEntity);
 
