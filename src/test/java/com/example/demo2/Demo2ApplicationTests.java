@@ -1,5 +1,6 @@
 package com.example.demo2;
 
+import com.example.demo2.question.QuestionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,11 +13,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Demo2ApplicationTests {
 
 	@Autowired
-	private CustomerService customerService;
+	private QuestionService questionService;
 
 	@Test
 	void contextLoads() {
-		assertThat(customerService).isNotNull();
+		assertThat(questionService).isNotNull();
 	}
 
 }
