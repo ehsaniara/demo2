@@ -2,7 +2,7 @@ package com.example.demo2;
 
 public interface CustomerService {
 
-    CustomerEntity createCustomer(String name);
+    CustomerDto createCustomer(CustomerCreateDto customerCreateDto);
 
     String greeting(String name);
 }

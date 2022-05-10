@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public CustomerEntity createCustomer(String name) {
-        return customerRepository.save(CustomerEntity.builder().customerName(name).build());
+    public CustomerDto createCustomer(CustomerCreateDto customerCreateDto) {
+        return customerMapper.customerToDto(customerRepository.save(CustomerEntity.builder().customerName(customerCreateDto.getCustomerName()).build()));
     }
 
     public String greeting(String name) {
