@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,5 +67,12 @@ public class QuestionControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.topic", hasToString(questionA.getTopic())));
+    }
+
+    @Test
+    void deleteAllQuestionTemplates() throws Exception {
+        mockMvc.perform(delete("/questionBank/questionTemplates"))
+                .andExpect(status().isOk());
+        verify(questionService).deleteAllQuestionTemplates();
     }
 }

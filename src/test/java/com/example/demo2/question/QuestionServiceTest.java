@@ -9,8 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionServiceTest {
@@ -29,16 +32,32 @@ class QuestionServiceTest {
     }
 
     @Test
-    void listQuestions() {
+    void listQuestionTemplates() {
         List<QuestionTemplateEntity> allQuestions = questionService.getQuestionTemplatesList();
-
         assertThat(allQuestions).isNotNull();
     }
 
-    //TODO
     @Test
-    @Disabled("TODO")
-    void postQuestion() {
+    void postQuestionTemplate() {
+        QuestionTemplateEntity questionTemplate = new QuestionTemplateEntity(
+                UUID.randomUUID(),
+                "free fall",
+                "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
+                "(H / 4.9) ** 0.5",
+                "sec"
+        );
+
+        when(questionTemplateRepository.save(questionTemplate)).thenReturn(questionTemplate);
+
+        QuestionTemplateEntity resultQuestion = questionService.postQuestionTemplate(questionTemplate);
+
+        assertThat(resultQuestion).isNotNull();
+    }
+
+    @Test
+    void deleteAllQuestionTemplates() {
+        questionService.deleteAllQuestionTemplates();
+        verify(questionTemplateRepository).deleteAll();
     }
 
     //TODO
@@ -47,9 +66,4 @@ class QuestionServiceTest {
     void deleteAllQuestions() {
     }
 
-    //TODO
-    @Test
-    @Disabled("TODO")
-    void deleteAllQuestionTemplates() {
-    }
 }

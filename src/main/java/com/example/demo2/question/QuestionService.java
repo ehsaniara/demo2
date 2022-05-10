@@ -24,8 +24,4 @@ public class QuestionService {
         questionTemplateRepository.deleteAll();
     }
 
-    //TODO
-    public List<FinalQuestionEntity> postFinalQuestions(UUID questionTemplateId, QuestionTemplateEntity questionTemplate) {
-        return null;
-    }
 }
