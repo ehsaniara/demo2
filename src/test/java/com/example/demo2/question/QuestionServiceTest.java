@@ -7,12 +7,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -69,18 +71,6 @@ class QuestionServiceTest {
         QuestionCreateResDto resultQuestion = questionService.createQuestionTemplate(questionCreateDto);
 
         assertThat(resultQuestion).isNotNull();
-    }
-
-    @Test
-    void createQuestionTemplate_incompleteData_returnBadRequest403() {
-        UUID uuid = UUID.randomUUID();
-        QuestionCreateDto questionCreateDto = new QuestionCreateDto (
-                "free fall",
-                null,
-                "(H / 4.9) ** 0.5",
-                "sec",
-                null
-        );
     }
 
     @Test

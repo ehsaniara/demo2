@@ -20,10 +20,6 @@ public class QuestionService {
     }
 
     public QuestionCreateResDto createQuestionTemplate(QuestionCreateDto questionCreateDto) {
-
-        //todo: verify incoming data return 403
-
-
         return questionMapper.questionToDto(questionTemplateRepository.save(questionMapper.dtoToEntity(questionCreateDto)));
     }
 

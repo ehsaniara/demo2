@@ -1,6 +1,7 @@
 package com.example.demo2.question;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.exception.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -73,6 +74,25 @@ public class QuestionControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.topic", hasToString(questionCreateResDto.getTopic())));
+    }
+
+    @Test
+    void postQuestionTemplate_invalidParameters_returnBadRequest() throws Exception {
+        List<VariableDto> variables = new ArrayList<>();
+        variables.add(new VariableDto("H", 3d, 15d, 2d, null));
+        QuestionCreateDto questionCreateDto = new QuestionCreateDto(
+                "Free Fall",
+                null,
+                "( H / 4.9 ) ^ 0.5 )",
+                "sec",
+                variables
+        );
+        when(questionService.createQuestionTemplate(questionCreateDto)).thenThrow(BadRequestException.class);
+
+        mockMvc.perform(post("/questionBank/questionTemplates").contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(questionCreateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
