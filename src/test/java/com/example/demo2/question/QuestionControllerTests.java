@@ -32,15 +32,11 @@ public class QuestionControllerTests {
 
     @Test
     void getAllQuestionTemplatesList() throws Exception {
-        List<QuestionTemplateEntity> questions = new ArrayList<>();
-        QuestionTemplateEntity questionA = new QuestionTemplateEntity();
-        questionA.setTopic("1-D Motion");
-
-        QuestionTemplateEntity questionB = new QuestionTemplateEntity();
-        questionB.setTopic("Free Fall");
-
-        questions.add(questionA);
-        questions.add(questionB);
+        List<QuestionDto> questions = new ArrayList<>();
+        QuestionDto questionDtoA = new QuestionDto();
+        QuestionDto questionDtoB = new QuestionDto();
+        questions.add(questionDtoA);
+        questions.add(questionDtoB);
 
         when(questionService.getQuestionTemplatesList()).thenReturn(questions);
 
@@ -52,7 +48,17 @@ public class QuestionControllerTests {
     @Test
     void postQuestionTemplate_valid_returnsQuestionTemplate() throws Exception {
 
-        QuestionTemplateEntity questionA = new QuestionTemplateEntity(
+        List<VariableDto> variables = new ArrayList<>();
+        variables.add(new VariableDto("H", 3d, 15d, 2d, null));
+
+        QuestionCreateDto questionCreateDto = new QuestionCreateDto(
+                "Free Fall",
+                "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
+                "( H / 4.9 ) ^ 0.5 )",
+                "sec",
+                variables
+        );
+        QuestionDto questionDto = new QuestionDto(
                 UUID.randomUUID(),
                 "Free Fall",
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
@@ -60,13 +66,13 @@ public class QuestionControllerTests {
                 "sec"
                 );
 
-        when(questionService.postQuestionTemplate(any(QuestionTemplateEntity.class))).thenReturn(questionA);
+        when(questionService.postQuestionTemplate(any(QuestionCreateDto.class))).thenReturn(questionDto);
 
         mockMvc.perform(post("/questionBank/questionTemplates").contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(questionA)))
+                        .content(mapper.writeValueAsString(questionCreateDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.topic", hasToString(questionA.getTopic())));
+                .andExpect(jsonPath("$.topic", hasToString(questionDto.getTopic())));
     }
 
     @Test

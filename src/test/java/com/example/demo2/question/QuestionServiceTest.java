@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionServiceTest {
@@ -24,21 +24,28 @@ class QuestionServiceTest {
     @Mock
     QuestionTemplateRepository questionTemplateRepository;
     @Mock
-    FinalQuestionRepository questionVariantRepository;
+    QuestionMapper questionMapper;
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionTemplateRepository, questionVariantRepository);
+        questionService = new QuestionService(questionTemplateRepository, questionMapper);
     }
 
     @Test
     void listQuestionTemplates() {
-        List<QuestionTemplateEntity> allQuestions = questionService.getQuestionTemplatesList();
+        List<QuestionDto> allQuestions = questionService.getQuestionTemplatesList();
         assertThat(allQuestions).isNotNull();
     }
 
     @Test
     void postQuestionTemplate() {
+        QuestionCreateDto questionCreateDto = new QuestionCreateDto (
+                "free fall",
+                "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
+                "(H / 4.9) ** 0.5",
+                "sec",
+                null
+        );
         QuestionTemplateEntity questionTemplate = new QuestionTemplateEntity(
                 UUID.randomUUID(),
                 "free fall",
@@ -46,10 +53,18 @@ class QuestionServiceTest {
                 "(H / 4.9) ** 0.5",
                 "sec"
         );
+        QuestionDto questionDto = new QuestionDto(
+                UUID.randomUUID(),
+                "free fall",
+                "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
+                "(H / 4.9) ** 0.5",
+                "sec"
+        );
 
-        when(questionTemplateRepository.save(questionTemplate)).thenReturn(questionTemplate);
+        doReturn(questionTemplate).when(questionTemplateRepository).save(any());
+        doReturn(questionDto).when(questionMapper).questionDto(any());
 
-        QuestionTemplateEntity resultQuestion = questionService.postQuestionTemplate(questionTemplate);
+        QuestionDto resultQuestion = questionService.postQuestionTemplate(questionCreateDto);
 
         assertThat(resultQuestion).isNotNull();
     }

@@ -7,21 +7,21 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("questionBank")
+@RequestMapping("/questionBank")
 @AllArgsConstructor
 public class QuestionController {
 
     private final QuestionService questionService;
 
     @GetMapping("/questionTemplates")
-    public List<QuestionTemplateEntity> getQuestionTemplates() {
+    public List<QuestionDto> getQuestionTemplates() {
         return questionService.getQuestionTemplatesList();
     }
 
     @PostMapping("/questionTemplates")
     @ResponseBody
-    public QuestionTemplateEntity postQuestionTemplate(@RequestBody QuestionTemplateEntity questionTemplate) {
-        return questionService.postQuestionTemplate(questionTemplate);
+    public QuestionDto postQuestionTemplate(@RequestBody QuestionCreateDto questionCreateDto) {
+        return questionService.postQuestionTemplate(questionCreateDto);
     }
 
     @DeleteMapping("/questionTemplates")
@@ -35,10 +35,9 @@ public class QuestionController {
 
     //TODO
     @GetMapping("/questions")
-    public List<FinalQuestionEntity> getFinalQuestions() {
+    public List<FinalQuestionDto> getFinalQuestions() {
         return null;
     }
-
 
 
     //TODO

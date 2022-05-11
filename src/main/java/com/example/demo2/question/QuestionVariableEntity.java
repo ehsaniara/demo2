@@ -1,5 +1,6 @@
 package com.example.demo2.question;
 
+import com.example.demo2.question.QuestionTemplateEntity;
 import lombok.*;
 
 import javax.persistence.*;
