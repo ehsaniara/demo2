@@ -3,13 +3,12 @@ package com.example.demo2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
 
@@ -53,9 +52,39 @@ class CustomerServiceImplTest {
     }
 
     @Test
+    void testCreateCustomer_NullObject() {
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> customerService.createCustomer(null),
+                "IllegalArgumentException was expected when object is null"
+        );
+        assertTrue(thrown.getMessage().contains("customerCreateDto can not be null"));
+    }
+
+    @Test
+    void testCreateCustomer_NullName() {
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> customerService.createCustomer(CustomerCreateDto.builder().build()),
+                "IllegalArgumentException was expected when name is null"
+        );
+        assertTrue(thrown.getMessage().contains("customerName can not be null"));
+    }
+
+    @Test
     void testGreeting() {
         var result = customerService.greeting("Jay");
         Assertions.assertNotNull(result);
         Assertions.assertEquals("Hello Jay!", result);
+    }
+
+    @Test
+    void testGreeting_NullName() {
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> customerService.greeting(null),
+                "IllegalArgumentException was expected when name is null"
+        );
+        assertTrue(thrown.getMessage().contains("Name can not be null"));
     }
 }
