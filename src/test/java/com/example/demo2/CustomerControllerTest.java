@@ -2,6 +2,7 @@ package com.example.demo2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,25 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.customerId").value(customerId))
                 //
                 .andExpect(MockMvcResultMatchers.jsonPath("$.customerName").value(customerName));
+    }
 
+    @Test
+    void testCreateCustomer_nullName() throws Exception {
+        //null check
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
+                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().build()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
+        //black check
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
+                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("").build()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
     }
 }
