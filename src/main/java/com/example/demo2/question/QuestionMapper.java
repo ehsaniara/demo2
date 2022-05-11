@@ -5,5 +5,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface QuestionMapper {
-    QuestionDto questionDto(QuestionTemplateEntity questionTemplateEntity);
+    QuestionCreateResDto questionToDto(QuestionTemplateEntity questionTemplateEntity);
+    QuestionTemplateEntity dtoToEntity (QuestionCreateDto questionCreateDto);
 }

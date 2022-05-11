@@ -7,12 +7,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,12 +35,13 @@ class QuestionServiceTest {
 
     @Test
     void listQuestionTemplates() {
-        List<QuestionDto> allQuestions = questionService.getQuestionTemplatesList();
+        List<QuestionCreateResDto> allQuestions = questionService.getQuestionTemplatesList();
         assertThat(allQuestions).isNotNull();
     }
 
     @Test
-    void postQuestionTemplate() {
+    void createQuestionTemplate() {
+        UUID uuid = UUID.randomUUID();
         QuestionCreateDto questionCreateDto = new QuestionCreateDto (
                 "free fall",
                 "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
@@ -46,25 +49,26 @@ class QuestionServiceTest {
                 "sec",
                 null
         );
-        QuestionTemplateEntity questionTemplate = new QuestionTemplateEntity(
-                UUID.randomUUID(),
+        QuestionTemplateEntity questionTemplateEntity = new QuestionTemplateEntity(
+                uuid,
                 "free fall",
                 "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
                 "(H / 4.9) ** 0.5",
                 "sec"
         );
-        QuestionDto questionDto = new QuestionDto(
-                UUID.randomUUID(),
+        QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
+                uuid,
                 "free fall",
                 "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
                 "(H / 4.9) ** 0.5",
                 "sec"
         );
 
-        doReturn(questionTemplate).when(questionTemplateRepository).save(any());
-        doReturn(questionDto).when(questionMapper).questionDto(any());
+        doReturn(questionTemplateEntity).when(questionMapper).dtoToEntity(questionCreateDto);
+        doReturn(questionTemplateEntity).when(questionTemplateRepository).save(questionTemplateEntity);
+        doReturn(questionCreateResDto).when(questionMapper).questionToDto(questionTemplateEntity);
 
-        QuestionDto resultQuestion = questionService.postQuestionTemplate(questionCreateDto);
+        QuestionCreateResDto resultQuestion = questionService.createQuestionTemplate(questionCreateDto);
 
         assertThat(resultQuestion).isNotNull();
     }

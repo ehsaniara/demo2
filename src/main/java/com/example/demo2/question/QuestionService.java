@@ -12,22 +12,15 @@ public class QuestionService {
     private final QuestionTemplateRepository questionTemplateRepository;
     private final QuestionMapper questionMapper;
 
-    public List<QuestionDto> getQuestionTemplatesList() {
+    public List<QuestionCreateResDto> getQuestionTemplatesList() {
         List<QuestionTemplateEntity> questTempEntities = questionTemplateRepository.findAll();
-        List<QuestionDto> QuestTempDtos = new ArrayList<>();
-        questTempEntities.forEach(questTempEntity -> QuestTempDtos.add(questionMapper.questionDto(questTempEntity)));
+        List<QuestionCreateResDto> QuestTempDtos = new ArrayList<>();
+        questTempEntities.forEach(questTempEntity -> QuestTempDtos.add(questionMapper.questionToDto(questTempEntity)));
         return QuestTempDtos;
     }
 
-    public QuestionDto postQuestionTemplate(QuestionCreateDto questionCreateDto) {
-        QuestionTemplateEntity questionTemplate = QuestionTemplateEntity.builder()
-                .topic(questionCreateDto.getTopic())
-                .baseQuestion(questionCreateDto.getBaseQuestion())
-                .solutionEquation(questionCreateDto.getSolutionEquation())
-                .solutionUnit(questionCreateDto.getSolutionUnit())
-                .build();
-
-        return questionMapper.questionDto(questionTemplateRepository.save(questionTemplate));
+    public QuestionCreateResDto createQuestionTemplate(QuestionCreateDto questionCreateDto) {
+        return questionMapper.questionToDto(questionTemplateRepository.save(questionMapper.dtoToEntity(questionCreateDto)));
     }
 
     public void deleteAllQuestionTemplates() {

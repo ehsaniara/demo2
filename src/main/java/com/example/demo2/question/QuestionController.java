@@ -3,6 +3,7 @@ package com.example.demo2.question;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,14 +15,14 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("/questionTemplates")
-    public List<QuestionDto> getQuestionTemplates() {
+    public List<QuestionCreateResDto> getQuestionTemplates() {
         return questionService.getQuestionTemplatesList();
     }
 
     @PostMapping("/questionTemplates")
     @ResponseBody
-    public QuestionDto postQuestionTemplate(@RequestBody QuestionCreateDto questionCreateDto) {
-        return questionService.postQuestionTemplate(questionCreateDto);
+    public QuestionCreateResDto postQuestionTemplate(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
+        return questionService.createQuestionTemplate(questionCreateDto);
     }
 
     @DeleteMapping("/questionTemplates")
