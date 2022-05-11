@@ -3,10 +3,7 @@ package com.example.demo2;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @ToString
 @Builder
@@ -22,5 +19,6 @@ public class CustomerEntity extends EntityAudit {
     @GeneratedValue
     private Long customerId;
 
+    @Column(nullable = false)
     private String customerName;
 }
