@@ -11,7 +11,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDto {
+public class QuestionCreateResDto {
     private UUID questionTemplateUuid;
     private String topic;
     private String baseQuestion;

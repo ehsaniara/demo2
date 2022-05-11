@@ -33,12 +33,13 @@ class QuestionServiceTest {
 
     @Test
     void listQuestionTemplates() {
-        List<QuestionDto> allQuestions = questionService.getQuestionTemplatesList();
+        List<QuestionCreateResDto> allQuestions = questionService.getQuestionTemplatesList();
         assertThat(allQuestions).isNotNull();
     }
 
     @Test
-    void postQuestionTemplate() {
+    void createQuestionTemplate() {
+        UUID uuid = UUID.randomUUID();
         QuestionCreateDto questionCreateDto = new QuestionCreateDto (
                 "free fall",
                 "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
@@ -46,27 +47,40 @@ class QuestionServiceTest {
                 "sec",
                 null
         );
-        QuestionTemplateEntity questionTemplate = new QuestionTemplateEntity(
-                UUID.randomUUID(),
+        QuestionTemplateEntity questionTemplateEntity = new QuestionTemplateEntity(
+                uuid,
                 "free fall",
                 "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
                 "(H / 4.9) ** 0.5",
                 "sec"
         );
-        QuestionDto questionDto = new QuestionDto(
-                UUID.randomUUID(),
+        QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
+                uuid,
                 "free fall",
                 "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
                 "(H / 4.9) ** 0.5",
                 "sec"
         );
 
-        doReturn(questionTemplate).when(questionTemplateRepository).save(any());
-        doReturn(questionDto).when(questionMapper).questionDto(any());
+        doReturn(questionTemplateEntity).when(questionMapper).dtoToEntity(questionCreateDto);
+        doReturn(questionTemplateEntity).when(questionTemplateRepository).save(questionTemplateEntity);
+        doReturn(questionCreateResDto).when(questionMapper).questionToDto(questionTemplateEntity);
 
-        QuestionDto resultQuestion = questionService.postQuestionTemplate(questionCreateDto);
+        QuestionCreateResDto resultQuestion = questionService.createQuestionTemplate(questionCreateDto);
 
         assertThat(resultQuestion).isNotNull();
+    }
+
+    @Test
+    void createQuestionTemplate_incompleteData_returnBadRequest403() {
+        UUID uuid = UUID.randomUUID();
+        QuestionCreateDto questionCreateDto = new QuestionCreateDto (
+                "free fall",
+                null,
+                "(H / 4.9) ** 0.5",
+                "sec",
+                null
+        );
     }
 
     @Test

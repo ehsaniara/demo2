@@ -32,11 +32,11 @@ public class QuestionControllerTests {
 
     @Test
     void getAllQuestionTemplatesList() throws Exception {
-        List<QuestionDto> questions = new ArrayList<>();
-        QuestionDto questionDtoA = new QuestionDto();
-        QuestionDto questionDtoB = new QuestionDto();
-        questions.add(questionDtoA);
-        questions.add(questionDtoB);
+        List<QuestionCreateResDto> questions = new ArrayList<>();
+        QuestionCreateResDto questionCreateResDtoA = new QuestionCreateResDto();
+        QuestionCreateResDto questionCreateResDtoB = new QuestionCreateResDto();
+        questions.add(questionCreateResDtoA);
+        questions.add(questionCreateResDtoB);
 
         when(questionService.getQuestionTemplatesList()).thenReturn(questions);
 
@@ -58,7 +58,7 @@ public class QuestionControllerTests {
                 "sec",
                 variables
         );
-        QuestionDto questionDto = new QuestionDto(
+        QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
                 UUID.randomUUID(),
                 "Free Fall",
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
@@ -66,13 +66,13 @@ public class QuestionControllerTests {
                 "sec"
                 );
 
-        when(questionService.postQuestionTemplate(any(QuestionCreateDto.class))).thenReturn(questionDto);
+        when(questionService.createQuestionTemplate(any(QuestionCreateDto.class))).thenReturn(questionCreateResDto);
 
         mockMvc.perform(post("/questionBank/questionTemplates").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(questionCreateDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.topic", hasToString(questionDto.getTopic())));
+                .andExpect(jsonPath("$.topic", hasToString(questionCreateResDto.getTopic())));
     }
 
     @Test

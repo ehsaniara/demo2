@@ -14,14 +14,14 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("/questionTemplates")
-    public List<QuestionDto> getQuestionTemplates() {
+    public List<QuestionCreateResDto> getQuestionTemplates() {
         return questionService.getQuestionTemplatesList();
     }
 
     @PostMapping("/questionTemplates")
     @ResponseBody
-    public QuestionDto postQuestionTemplate(@RequestBody QuestionCreateDto questionCreateDto) {
-        return questionService.postQuestionTemplate(questionCreateDto);
+    public QuestionCreateResDto postQuestionTemplate(@RequestBody QuestionCreateDto questionCreateDto) {
+        return questionService.createQuestionTemplate(questionCreateDto);
     }
 
     @DeleteMapping("/questionTemplates")
