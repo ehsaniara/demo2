@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("customer")
 @AllArgsConstructor
@@ -17,7 +19,7 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public CustomerDto createCustomer(@RequestBody CustomerCreateDto customerCreateDto) {
+    public CustomerDto createCustomer(@Valid @RequestBody CustomerCreateDto customerCreateDto) {
         return customerService.createCustomer(customerCreateDto);
     }
 }

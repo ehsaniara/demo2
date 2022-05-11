@@ -2,6 +2,8 @@ package com.example.demo2;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+
 @ToString
 @Builder
 @Setter
@@ -11,5 +13,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CustomerCreateDto {
 
+    @NotBlank(message = "customerName can not be null or blank")
     private String customerName;
 }
