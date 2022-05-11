@@ -1,4 +1,5 @@
-# Spring Boot JPA example
+# Demo2: 
+## Spring Boot and JPA, Best Practices
 
 
 Make sure your docker desktop is running (https://www.docker.com/get-started/)
