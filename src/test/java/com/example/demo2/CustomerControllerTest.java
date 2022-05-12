@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.UUID;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -48,9 +50,9 @@ class CustomerControllerTest {
     void testCreateCustomer() throws Exception {
 
         var customerName = "Jay";
-        var customerId = 1L;
+        var randomUuid = UUID.randomUUID();
         var customerDto = CustomerDto.builder()//
-                .customerId(customerId)//
+                .customerUuid(randomUuid)//
                 .customerName(customerName)//
                 .build();
         var customerCreateDto = CustomerCreateDto.builder().customerName(customerName).build();
@@ -73,9 +75,8 @@ class CustomerControllerTest {
 
         perform
                 .andDo(print())
-                //
-                //
-                .andExpect(MockMvcResultMatchers.jsonPath("$.customerId").value(customerId))
+                //note: for UUID we should see it as string in json payloads
+                .andExpect(MockMvcResultMatchers.jsonPath("$.customerUuid").value(randomUuid.toString()))
                 //
                 .andExpect(MockMvcResultMatchers.jsonPath("$.customerName").value(customerName));
     }
