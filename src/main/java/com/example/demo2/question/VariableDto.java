@@ -2,6 +2,7 @@ package com.example.demo2.question;
 
 import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @ToString
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VariableDto {
+    @NotEmpty
     private String name;
     private Double min;
     private Double max;
