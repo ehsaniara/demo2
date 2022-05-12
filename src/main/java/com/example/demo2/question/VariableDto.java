@@ -18,5 +18,6 @@ public class VariableDto {
     private Double min;
     private Double max;
     private Double interval;
+    @NotEmpty
     private List<Double> values;
 }

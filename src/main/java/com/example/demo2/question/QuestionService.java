@@ -27,24 +27,22 @@ public class QuestionService {
     }
 
     public void createQuestionVariables(List<VariableDto> variables, QuestionTemplateEntity questionTemplate) {
-        for (VariableDto var : variables) {
-            if (var.getMin() != null) {
-                for (Double value = var.getMin(); value < var.getMax(); value = value + var.getInterval()) {
-                    QuestionVariableEntity questionVariableEntity = new QuestionVariableEntity(
-                            null,
-                            questionTemplate,
-                            var.getName(),
-                            value
-                    );
-                     questionVariableRepo.save(questionVariableEntity);
+        for (VariableDto variable : variables) {
+            if (variable.getMin() != null && variable.getMax() != null && variable.getMin() < variable.getMax() ) {
+                if (variable.getInterval() == null) { variable.setInterval(1d); }
+                for (Double value = variable.getMin(); value < variable.getMax(); value = value + variable.getInterval()) {
+                    variable.getValues().add(value);
                 }
             }
-            if (var.getValues() != null){
-                // iterate through var.getValues
-                    // create question variable entity
-                // questionVariableRepo.save()
+            for (Double value : variable.getValues()) {
+                QuestionVariableEntity questionVariableEntity = new QuestionVariableEntity(
+                        null,
+                        questionTemplate,
+                        variable.getName(),
+                        value
+                );
+                questionVariableRepo.save(questionVariableEntity);
             }
-
         }
     }
 
