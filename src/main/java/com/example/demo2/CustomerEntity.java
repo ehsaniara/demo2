@@ -4,6 +4,7 @@ package com.example.demo2;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @ToString
 @Builder
@@ -17,7 +18,7 @@ public class CustomerEntity extends EntityAudit {
 
     @Id
     @GeneratedValue
-    private Long customerId;
+    private UUID customerUuid;
 
     @Column(nullable = false)
     private String customerName;

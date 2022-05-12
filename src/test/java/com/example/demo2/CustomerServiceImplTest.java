@@ -7,6 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
@@ -26,10 +28,11 @@ class CustomerServiceImplTest {
 
     @Test
     void testCreateCustomer() {
-        var customerEntity = CustomerEntity.builder().customerId(1L).customerName("Jay").build();
+        var randomUuid = UUID.randomUUID();
+        var customerEntity = CustomerEntity.builder().customerUuid(randomUuid).customerName("Jay").build();
 
         var customerDto = CustomerDto.builder()//
-                .customerId(customerEntity.getCustomerId())//
+                .customerUuid(customerEntity.getCustomerUuid())//
                 .customerName(customerEntity.getCustomerName())//
                 .build();
 
@@ -48,7 +51,7 @@ class CustomerServiceImplTest {
         Assertions.assertNotNull(resultDto);
 
         Assertions.assertEquals(customerDto.getCustomerName(), resultDto.getCustomerName());
-        Assertions.assertEquals(customerDto.getCustomerId(), resultDto.getCustomerId());
+        Assertions.assertEquals(customerDto.getCustomerUuid(), resultDto.getCustomerUuid());
     }
 
     @Test

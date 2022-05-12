@@ -14,6 +14,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @DataJpaTest
 @Testcontainers
@@ -45,6 +46,5 @@ class CustomerRepositoryContainerTest {
         customerRepository.findAll().forEach(customers::add);
 
         Assertions.assertThat(customers).extracting(CustomerEntity::getCustomerName).containsOnly("Jay");
-        Assertions.assertThat(customers).extracting(CustomerEntity::getCustomerId).containsOnly(1L);
     }
 }
