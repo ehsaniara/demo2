@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -26,10 +28,10 @@ class CustomerServiceImplTest {
     @Test
     void testCreateCustomer() {
 
-        var customerEntity = CustomerEntity.builder().customerId(1L).customerName("Jay").build();
+        var customerEntity = CustomerEntity.builder().customerUuid(UUID.randomUUID()).customerName("Jay").build();
 
         var customerDto = CustomerDto.builder()//
-                .customerId(customerEntity.getCustomerId())//
+                .customerUuid(customerEntity.getCustomerUuid())//
                 .customerName(customerEntity.getCustomerName())//
                 .build();
 
