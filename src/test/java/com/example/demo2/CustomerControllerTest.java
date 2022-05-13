@@ -41,7 +41,7 @@ class CustomerControllerTest {
 
         when(customerService.greeting(customerName)).thenReturn("Hi Jay!");
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/customer/{name}", customerName)).andExpect(MockMvcResultMatchers.status().isOk())//
+        mockMvc.perform(MockMvcRequestBuilders.get("/customer/name/{name}", customerName)).andExpect(MockMvcResultMatchers.status().isOk())//
                 .andDo(print())//
                 .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.equalTo("Hi Jay!")));
     }
@@ -99,5 +99,19 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
+    }
+
+    @Test
+    void getCustomer() throws Exception {
+        var customerDto = CustomerDto.builder().customerUuid(UUID.randomUUID()).customerName("Jay").build();
+
+        when(customerService.getCustomer(customerDto.getCustomerUuid())).thenReturn(customerDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/customer/{customerUuid}", customerDto.getCustomerUuid())).andExpect(MockMvcResultMatchers.status().isOk())//
+                .andDo(print())//
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.customerUuid").value(customerDto.getCustomerUuid().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.customerName").value(customerDto.getCustomerName()));
+
     }
 }
