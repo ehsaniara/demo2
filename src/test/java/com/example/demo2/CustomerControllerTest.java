@@ -82,6 +82,19 @@ class CustomerControllerTest {
     }
 
     @Test
+    void getCustomer() throws Exception {
+        var customerDto = CustomerDto.builder().customerUuid(UUID.randomUUID()).customerName("Jay").build();
+
+        when(customerService.getCustomer(customerDto.getCustomerUuid())).thenReturn(customerDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/customer/{customerUuid}", customerDto.getCustomerUuid())).andExpect(MockMvcResultMatchers.status().isOk())//
+                .andDo(print())//
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.customerUuid").value(customerDto.getCustomerUuid().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.customerName").value(customerDto.getCustomerName()));
+    }
+
+    @Test
     void testCreateCustomer_nullName() throws Exception {
         //null check
         mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
@@ -99,19 +112,5 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
-    }
-
-    @Test
-    void getCustomer() throws Exception {
-        var customerDto = CustomerDto.builder().customerUuid(UUID.randomUUID()).customerName("Jay").build();
-
-        when(customerService.getCustomer(customerDto.getCustomerUuid())).thenReturn(customerDto);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/customer/{customerUuid}", customerDto.getCustomerUuid())).andExpect(MockMvcResultMatchers.status().isOk())//
-                .andDo(print())//
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.customerUuid").value(customerDto.getCustomerUuid().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.customerName").value(customerDto.getCustomerName()));
-
     }
 }

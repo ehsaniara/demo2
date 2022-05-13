@@ -60,13 +60,23 @@ class CustomerServiceImplTest {
 
     @Test
     void testCreateCustomer_NullObject() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(null), "IllegalArgumentException was expected when object is null");
+
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> customerService.createCustomer(null),
+                "IllegalArgumentException was expected when object is null"
+        );
         assertTrue(thrown.getMessage().contains("customerCreateDto can not be null"));
     }
 
     @Test
     void testCreateCustomer_NullName() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(CustomerCreateDto.builder().build()), "IllegalArgumentException was expected when name is null");
+
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> customerService.createCustomer(CustomerCreateDto.builder().build()),
+                "IllegalArgumentException was expected when name is null"
+        );
         assertTrue(thrown.getMessage().contains("customerName can not be null"));
     }
 
@@ -109,5 +119,15 @@ class CustomerServiceImplTest {
     void testGetCustomer_NotFound() {
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> customerService.getCustomer(UUID.randomUUID()), "RuntimeException was expected when customer not found");
         assertTrue(thrown.getMessage().contains("customer Not found"));
+    }
+
+    @Test
+    void testGreeting_NullName() {
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> customerService.greeting(null),
+                "IllegalArgumentException was expected when name is null"
+        );
+        assertTrue(thrown.getMessage().contains("Name can not be null"));
     }
 }
