@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,11 +27,13 @@ class QuestionServiceTest {
     @Mock
     QuestionTemplateRepository questionTemplateRepository;
     @Mock
+    QuestionVariableRepo questionVariableRepo;
+    @Mock
     QuestionMapper questionMapper;
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionTemplateRepository, questionMapper);
+        questionService = new QuestionService(questionTemplateRepository, questionVariableRepo, questionMapper);
     }
 
     @Test
@@ -42,12 +45,14 @@ class QuestionServiceTest {
     @Test
     void createQuestionTemplate() {
         UUID uuid = UUID.randomUUID();
+        List<VariableDto> variables = new ArrayList<>();
         QuestionCreateDto questionCreateDto = new QuestionCreateDto (
                 "free fall",
                 "give a ball is dropped from a height of ${H}m, how long will it take to hit the ground?",
                 "(H / 4.9) ** 0.5",
                 "sec",
-                null
+                variables
+
         );
         QuestionTemplateEntity questionTemplateEntity = new QuestionTemplateEntity(
                 uuid,
