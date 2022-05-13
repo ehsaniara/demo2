@@ -1,8 +1,11 @@
 package com.example.demo2;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -10,6 +13,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+
+    @Override
+    public CustomerDto getCustomer(UUID customerUuid) {
+        return customerMapper.customerToDto(customerRepository.findById(customerUuid).orElseThrow(() -> new RuntimeException("customer Not found")));
+    }
 
     public CustomerDto createCustomer(CustomerCreateDto customerCreateDto) {
         Assert.notNull(customerCreateDto, "customerCreateDto can not be null");

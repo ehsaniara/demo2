@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("customer")
@@ -12,7 +13,7 @@ import javax.validation.Valid;
 public class CustomerController {
     private final CustomerService customerService;
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public String sayHi(@PathVariable(name = "name") String name) {
         return customerService.greeting(name);
     }
@@ -21,5 +22,10 @@ public class CustomerController {
     @PostMapping
     public CustomerDto createCustomer(@Valid @RequestBody CustomerCreateDto customerCreateDto) {
         return customerService.createCustomer(customerCreateDto);
+    }
+
+    @GetMapping("/{customerUuid}")
+    public CustomerDto getCustomerDto(@PathVariable(name = "customerUuid") UUID customerUuid) {
+        return customerService.getCustomer(customerUuid);
     }
 }
