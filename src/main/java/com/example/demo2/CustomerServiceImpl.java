@@ -22,6 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto createCustomer(CustomerCreateDto customerCreateDto) {
         Assert.notNull(customerCreateDto, "customerCreateDto can not be null");
         Assert.notNull(customerCreateDto.getCustomerName(), "customerName can not be null");
+        Assert.notNull(customerCreateDto.getCity(), "city can not be null");
         return customerMapper.customerToDto(customerRepository.save(CustomerEntity.builder().customerName(customerCreateDto.getCustomerName()).build()));
     }
 

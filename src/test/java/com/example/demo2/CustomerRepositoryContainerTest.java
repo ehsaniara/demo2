@@ -36,7 +36,7 @@ class CustomerRepositoryContainerTest {
 
     @Test
     void testCreateCustomer() {
-        var customerEntity = CustomerEntity.builder().customerName("Jay").build();
+        var customerEntity = CustomerEntity.builder().customerName("Jay").city("Los Angeles").build();
         customerEntity.setCreateDate(Instant.now());
 
         customerRepository.save(customerEntity);

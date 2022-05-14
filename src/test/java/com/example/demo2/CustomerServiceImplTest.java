@@ -29,15 +29,17 @@ class CustomerServiceImplTest {
     @Test
     void testCreateCustomer() {
 
-        var customerEntity = CustomerEntity.builder().customerUuid(UUID.randomUUID()).customerName("Jay").build();
+        var customerEntity = CustomerEntity.builder().customerUuid(UUID.randomUUID()).customerName("Jay").city("Los Angeles").build();
 
         var customerDto = CustomerDto.builder()//
                 .customerUuid(customerEntity.getCustomerUuid())//
                 .customerName(customerEntity.getCustomerName())//
+                .customerName(customerEntity.getCity())//
                 .build();
 
         var customerCreateDto = CustomerCreateDto.builder()//
                 .customerName(customerEntity.getCustomerName())//
+                .city(customerEntity.getCity())//
                 .build();
 
         when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
@@ -60,14 +62,20 @@ class CustomerServiceImplTest {
 
     @Test
     void testCreateCustomer_NullObject() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(null), "IllegalArgumentException was expected when object is null");
+        var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(null), "IllegalArgumentException was expected when object is null");
         assertTrue(thrown.getMessage().contains("customerCreateDto can not be null"));
     }
 
     @Test
     void testCreateCustomer_NullName() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(CustomerCreateDto.builder().build()), "IllegalArgumentException was expected when name is null");
-        assertTrue(thrown.getMessage().contains("customerName can not be null"));
+        {
+            var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(CustomerCreateDto.builder().build()), "IllegalArgumentException was expected when name is null");
+            assertTrue(thrown.getMessage().contains("customerName can not be null"));
+        }
+        {
+            var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(CustomerCreateDto.builder().customerName("Jay").build()), "IllegalArgumentException was expected when city is null");
+            assertTrue(thrown.getMessage().contains("city can not be null"));
+        }
     }
 
     @Test
