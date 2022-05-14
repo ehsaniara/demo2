@@ -14,6 +14,6 @@ import java.util.UUID;
 public class CustomerDto {
 
     private UUID customerUuid;
-
     private String customerName;
+    private String city;
 }

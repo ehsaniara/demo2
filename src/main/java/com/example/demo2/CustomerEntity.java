@@ -22,4 +22,6 @@ public class CustomerEntity extends EntityAudit {
 
     @Column(nullable = false)
     private String customerName;
+    @Column(nullable = false)
+    private String city;
 }

@@ -15,4 +15,6 @@ public class CustomerCreateDto {
 
     @NotBlank(message = "customerName can not be null or blank")
     private String customerName;
+    @NotBlank(message = "city can not be null or blank")
+    private String city;
 }

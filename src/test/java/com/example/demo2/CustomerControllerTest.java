@@ -50,12 +50,14 @@ class CustomerControllerTest {
     void testCreateCustomer() throws Exception {
 
         var customerName = "Jay";
+        var city = "Los Angeles";
         var randomUuid = UUID.randomUUID();
         var customerDto = CustomerDto.builder()//
                 .customerUuid(randomUuid)//
                 .customerName(customerName)//
+                .city(city)//
                 .build();
-        var customerCreateDto = CustomerCreateDto.builder().customerName(customerName).build();
+        var customerCreateDto = CustomerCreateDto.builder().customerName(customerName).city(city).build();
 
         given(customerService.createCustomer(customerCreateDto)).willReturn(customerDto);
 
@@ -91,6 +93,15 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
+                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("Jay").build()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("city can not be null or blank")));
+
         //black check
         mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
                         .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("").build()))
@@ -99,6 +110,14 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
+                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("Jay").city("").build()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("city can not be null or blank")));
     }
 
     @Test
