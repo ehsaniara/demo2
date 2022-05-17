@@ -15,7 +15,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -75,8 +78,7 @@ class CustomerControllerTest {
 
         verify(customerService, times(1)).createCustomer(customerCreateDto);
 
-        perform
-                .andDo(print())
+        perform.andDo(print())
                 //note: for UUID we should see it as string in json payloads
                 .andExpect(MockMvcResultMatchers.jsonPath("$.customerUuid").value(randomUuid.toString()))
                 //
@@ -86,38 +88,14 @@ class CustomerControllerTest {
     @Test
     void testCreateCustomer_nullName() throws Exception {
         //null check
-        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
-                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().build()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/").content(objectMapper.writeValueAsString(CustomerCreateDto.builder().build())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400)).andExpect(MockMvcResultMatchers.status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
-                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("Jay").build()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("city can not be null or blank")));
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/").content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("Jay").build())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400)).andExpect(MockMvcResultMatchers.status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("city can not be null or blank")));
 
         //black check
-        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
-                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("").build()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/").content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("").build())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400)).andExpect(MockMvcResultMatchers.status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("customerName can not be null or blank")));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
-                        .content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("Jay").city("").build()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("city can not be null or blank")));
+        mockMvc.perform(MockMvcRequestBuilders.post("/customer/").content(objectMapper.writeValueAsString(CustomerCreateDto.builder().customerName("Jay").city("").build())).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400)).andExpect(MockMvcResultMatchers.status().isBadRequest()).andExpect(MockMvcResultMatchers.jsonPath("$.error").value(Matchers.containsString("city can not be null or blank")));
     }
 
     @Test
@@ -128,9 +106,22 @@ class CustomerControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/customer/{customerUuid}", customerDto.getCustomerUuid())).andExpect(MockMvcResultMatchers.status().isOk())//
                 .andDo(print())//
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.customerUuid").value(customerDto.getCustomerUuid().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.customerName").value(customerDto.getCustomerName()));
+                .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.customerUuid").value(customerDto.getCustomerUuid().toString())).andExpect(MockMvcResultMatchers.jsonPath("$.customerName").value(customerDto.getCustomerName()));
+
+    }
+
+    @Test
+    void testGetAllCustomerDto() throws Exception {
+        List<CustomerDto> customerDtoList = new ArrayList<>();
+        IntStream.range(0, 3).forEach(i -> customerDtoList.add(CustomerDto.builder().customerUuid(UUID.randomUUID()).customerName("Jay" + i).build()));
+
+        when(customerService.getAllCustomerDto()).thenReturn(customerDtoList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/customer/")).andExpect(MockMvcResultMatchers.status().isOk())//
+                .andDo(print())//
+                .andExpect(MockMvcResultMatchers.status().isOk())//
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].customerUuid").value(customerDtoList.get(0).getCustomerUuid().toString()))//
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].customerName").value(customerDtoList.get(0).getCustomerName()));//
 
     }
 }
