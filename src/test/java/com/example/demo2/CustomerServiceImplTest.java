@@ -8,8 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -117,5 +120,35 @@ class CustomerServiceImplTest {
     void testGetCustomer_NotFound() {
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> customerService.getCustomer(UUID.randomUUID()), "RuntimeException was expected when customer not found");
         assertTrue(thrown.getMessage().contains("customer Not found"));
+    }
+
+    @Test
+    void testGetAllCustomerDto() {
+
+        List<CustomerEntity> customerEntityList = new ArrayList<>();
+
+        IntStream.range(0, 3).forEach(i -> customerEntityList.add(CustomerEntity.builder().customerUuid(UUID.randomUUID()).customerName("Jay" + i).build()));
+
+        List<CustomerDto> customerDtoList = new ArrayList<>();
+        customerEntityList.forEach(customerEntity -> customerDtoList.add(CustomerDto.builder()//
+                .customerUuid(customerEntity.getCustomerUuid())//
+                .customerName(customerEntity.getCustomerName())//
+                .build()));
+
+        when(customerRepository.findAll()).thenReturn(customerEntityList);
+
+        IntStream.range(0, 3)//
+                .forEach(i -> //
+                        doReturn(customerDtoList.get(i)).when(customerMapper).customerToDto(customerEntityList.get(i)//
+                        )//
+                );
+
+        var returned = customerService.getAllCustomerDto();
+        Assertions.assertNotNull(returned);
+
+        verify(customerRepository, times(1)).findAll();
+        verifyNoMoreInteractions(customerRepository);
+
+        assertEquals(customerDtoList, returned);
     }
 }

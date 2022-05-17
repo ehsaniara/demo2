@@ -1,11 +1,12 @@
 package com.example.demo2;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 @Service
 @AllArgsConstructor
@@ -17,6 +18,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto getCustomer(UUID customerUuid) {
         return customerMapper.customerToDto(customerRepository.findById(customerUuid).orElseThrow(() -> new RuntimeException("customer Not found")));
+    }
+
+    //potential pagination
+    @Override
+    public List<CustomerDto> getAllCustomerDto() {
+        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)//
+                .map(customerMapper::customerToDto).toList();
     }
 
     public CustomerDto createCustomer(CustomerCreateDto customerCreateDto) {

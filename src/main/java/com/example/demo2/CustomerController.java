@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,5 +28,10 @@ public class CustomerController {
     @GetMapping("/{customerUuid}")
     public CustomerDto getCustomerDto(@PathVariable(name = "customerUuid") UUID customerUuid) {
         return customerService.getCustomer(customerUuid);
+    }
+
+    @GetMapping("/")
+    public List<CustomerDto> getAllCustomerDto() {
+        return customerService.getAllCustomerDto();
     }
 }
