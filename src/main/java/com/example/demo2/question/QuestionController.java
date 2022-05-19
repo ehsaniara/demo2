@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/questionBank")
@@ -26,24 +25,22 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questionTemplates")
-    public void deleteAllQuestionTemplates() { questionService.deleteAllQuestionTemplates();}
+    public void deleteAllQuestionTemplates() { questionService.deleteAllFinalQuestionsAndQuestionTemplates();}
 
-    //TODO
-    @DeleteMapping("/questionTemplates/{id}")
-    public void deleteSingleQuestionTemplateAndCorrespondingQuestions(
-            @PathVariable(name = "id") UUID questionTemplateId
-    ){}
+//    //TODO
+//    @DeleteMapping("/questionTemplates/{id}")
+//    public void deleteSingleQuestionTemplateAndCorrespondingQuestions(
+//            @PathVariable(name = "id") UUID questionTemplateId
+//    ){}
 
-    //TODO
-    @GetMapping("/questions")
-    public List<FinalQuestionDto> getFinalQuestions() {
-        return null;
+
+    @GetMapping("/finalQuestions")
+    public List<FinalQuestionResDto> getFinalQuestions() {
+        return questionService.getFinalQuestionsList();
     }
 
-
-    //TODO
-    @DeleteMapping("/questions")
-    public void deleteAllQuestions() {}
-
-
+    @GetMapping("/finalQuestions/{topic}")
+    public List<FinalQuestionResDto> getFinalQuestionsByTopic(@PathVariable String topic) {
+        return questionService.getFinalQuestionsListByTopic(topic);
+    }
 }
