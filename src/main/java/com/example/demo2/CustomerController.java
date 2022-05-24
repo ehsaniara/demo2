@@ -14,11 +14,6 @@ import java.util.UUID;
 public class CustomerController {
     private final CustomerService customerService;
 
-    @GetMapping("/name/{name}")
-    public String sayHi(@PathVariable(name = "name") String name) {
-        return customerService.greeting(name);
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CustomerDto createCustomer(@Valid @RequestBody CustomerCreateDto customerCreateDto) {

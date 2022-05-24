@@ -82,19 +82,6 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void testGreeting() {
-        var result = customerService.greeting("Jay");
-        Assertions.assertNotNull(result);
-        assertEquals("Hello Jay!", result);
-    }
-
-    @Test
-    void testGreeting_NullName() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> customerService.greeting(null), "IllegalArgumentException was expected when name is null");
-        assertTrue(thrown.getMessage().contains("Name can not be null"));
-    }
-
-    @Test
     void testGetCustomer() {
         var customerEntity = CustomerEntity.builder().customerUuid(UUID.randomUUID()).customerName("Jay").build();
 
