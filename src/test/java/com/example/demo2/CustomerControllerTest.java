@@ -50,7 +50,7 @@ class CustomerControllerTest {
                 .build();
         var customerCreateDto = CustomerCreateDto.builder().customerName(customerName).city(city).build();
 
-        given(customerService.createCustomer(customerCreateDto)).willReturn(customerDto);
+        given(customerService.createCustomer()).willReturn(customerCreateDto1 -> customerDto);
 
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/customer/")
                         //
@@ -64,7 +64,7 @@ class CustomerControllerTest {
                 //
         ).andExpect(MockMvcResultMatchers.status().isCreated());
 
-        verify(customerService, times(1)).createCustomer(customerCreateDto);
+        verify(customerService, times(1)).createCustomer();
 
         perform.andDo(print())
                 //note: for UUID we should see it as string in json payloads
@@ -90,7 +90,7 @@ class CustomerControllerTest {
     void getCustomer() throws Exception {
         var customerDto = CustomerDto.builder().customerUuid(UUID.randomUUID()).customerName("Jay").build();
 
-        when(customerService.getCustomer(customerDto.getCustomerUuid())).thenReturn(customerDto);
+        when(customerService.getCustomer()).thenReturn(c -> customerDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/customer/{customerUuid}", customerDto.getCustomerUuid())).andExpect(MockMvcResultMatchers.status().isOk())//
                 .andDo(print())//
@@ -103,7 +103,7 @@ class CustomerControllerTest {
         List<CustomerDto> customerDtoList = new ArrayList<>();
         IntStream.range(0, 3).forEach(i -> customerDtoList.add(CustomerDto.builder().customerUuid(UUID.randomUUID()).customerName("Jay" + i).build()));
 
-        when(customerService.getAllCustomerDto()).thenReturn(customerDtoList);
+        when(customerService.getAllCustomerDto()).thenReturn(() -> customerDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/customer/")).andExpect(MockMvcResultMatchers.status().isOk())//
                 .andDo(print())//

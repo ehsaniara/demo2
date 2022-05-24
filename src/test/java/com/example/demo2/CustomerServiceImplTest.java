@@ -49,7 +49,7 @@ class CustomerServiceImplTest {
 
         doReturn(customerDto).when(customerMapper).customerToDto(customerEntity);
 
-        var result = customerService.createCustomer(customerCreateDto);
+        var result = customerService.createCustomer().apply(customerCreateDto);
         Assertions.assertNotNull(result);
 
         verify(customerRepository, times(1)).save(any());
@@ -65,18 +65,18 @@ class CustomerServiceImplTest {
 
     @Test
     void testCreateCustomer_NullObject() {
-        var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(null), "IllegalArgumentException was expected when object is null");
+        var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer().apply(null), "IllegalArgumentException was expected when object is null");
         assertTrue(thrown.getMessage().contains("customerCreateDto can not be null"));
     }
 
     @Test
     void testCreateCustomer_NullName() {
         {
-            var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(CustomerCreateDto.builder().build()), "IllegalArgumentException was expected when name is null");
+            var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer().apply(CustomerCreateDto.builder().build()), "IllegalArgumentException was expected when name is null");
             assertTrue(thrown.getMessage().contains("customerName can not be null"));
         }
         {
-            var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(CustomerCreateDto.builder().customerName("Jay").build()), "IllegalArgumentException was expected when city is null");
+            var thrown = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer().apply(CustomerCreateDto.builder().customerName("Jay").build()), "IllegalArgumentException was expected when city is null");
             assertTrue(thrown.getMessage().contains("city can not be null"));
         }
     }
@@ -94,7 +94,7 @@ class CustomerServiceImplTest {
 
         doReturn(customerDto).when(customerMapper).customerToDto(customerEntity);
 
-        var returned = customerService.getCustomer(customerEntity.getCustomerUuid());
+        var returned = customerService.getCustomer().apply(customerEntity.getCustomerUuid());
         Assertions.assertNotNull(returned);
 
         verify(customerRepository, times(1)).findById(customerEntity.getCustomerUuid());
@@ -105,7 +105,7 @@ class CustomerServiceImplTest {
 
     @Test
     void testGetCustomer_NotFound() {
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> customerService.getCustomer(UUID.randomUUID()), "RuntimeException was expected when customer not found");
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> customerService.getCustomer().apply(UUID.randomUUID()), "RuntimeException was expected when customer not found");
         assertTrue(thrown.getMessage().contains("customer Not found"));
     }
 
@@ -130,7 +130,7 @@ class CustomerServiceImplTest {
                         )//
                 );
 
-        var returned = customerService.getAllCustomerDto();
+        var returned = customerService.getAllCustomerDto().get();
         Assertions.assertNotNull(returned);
 
         verify(customerRepository, times(1)).findAll();
