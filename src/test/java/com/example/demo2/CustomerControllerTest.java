@@ -38,18 +38,6 @@ class CustomerControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void testSayHi() throws Exception {
-
-        var customerName = "Jay";
-
-        when(customerService.greeting(customerName)).thenReturn("Hi Jay!");
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/customer/name/{name}", customerName)).andExpect(MockMvcResultMatchers.status().isOk())//
-                .andDo(print())//
-                .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.equalTo("Hi Jay!")));
-    }
-
-    @Test
     void testCreateCustomer() throws Exception {
 
         var customerName = "Jay";
