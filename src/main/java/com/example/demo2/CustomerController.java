@@ -17,16 +17,16 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CustomerDto createCustomer(@Valid @RequestBody CustomerCreateDto customerCreateDto) {
-        return customerService.createCustomer(customerCreateDto);
+        return customerService.createCustomer().apply(customerCreateDto);
     }
 
     @GetMapping("/{customerUuid}")
     public CustomerDto getCustomerDto(@PathVariable(name = "customerUuid") UUID customerUuid) {
-        return customerService.getCustomer(customerUuid);
+        return customerService.getCustomer().apply(customerUuid);
     }
 
     @GetMapping("/")
     public List<CustomerDto> getAllCustomerDto() {
-        return customerService.getAllCustomerDto();
+        return customerService.getAllCustomerDto().get();
     }
 }
