@@ -99,6 +99,17 @@ public class QuestionControllerTests {
     void deleteAllQuestionTemplates() throws Exception {
         mockMvc.perform(delete("/questionBank/questionTemplates"))
                 .andExpect(status().isOk());
-        verify(questionService).deleteAllQuestionTemplates();
+        verify(questionService).deleteAllFinalQuestionsAndQuestionTemplates();
+    }
+
+    @Test
+    void getAllFinalQuestionsList() throws Exception {
+        List<FinalQuestionResDto> finalQuestions = new ArrayList<>();
+
+        when(questionService.getFinalQuestionsList()).thenReturn(finalQuestions);
+
+        mockMvc.perform(get("/questionBank/finalQuestions"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }

@@ -1,6 +1,5 @@
 package com.example.demo2.question;
 
-import com.example.demo2.question.QuestionTemplateEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,8 +22,12 @@ public class FinalQuestionEntity {
     @JoinColumn(name="question_template_uuid", nullable = false)
     private QuestionTemplateEntity questionTemplate;
 
+    @Column()
+    private String topic;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String finalQuestion;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String finalEquation;
     @Column(nullable = false)
     private double result;
 }
