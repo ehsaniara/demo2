@@ -3,6 +3,7 @@ package com.example.demo2.question;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @ToString
@@ -13,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionCreateDto {
-    @NotEmpty(message = "Topic is mandatory")
-    private String topic;
+    @NotNull( message = "Topic is mandatory")
+    private TopicEnum topicEnum;
     @NotEmpty(message = "Base Question is mandatory")
     private String baseQuestion;
     @NotEmpty(message = "Equation is mandatory")

@@ -1,0 +1,16 @@
+.search-body {
+    background: #FFF8D6;
+    padding: 2em;
+}
+
+.unit-container {
+    background: #F0FAF4;
+    margin: 1em;
+    padding: 1em;
+    border-radius: 2em;
+    border: #184E2A solid;
+}
+
+.topics-container {
+    margin: 1em;
+}

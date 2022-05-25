@@ -18,7 +18,8 @@ public class QuestionTemplateEntity {
     @Id
     @GeneratedValue
     private UUID questionTemplateUuid;
-    private String topic;
+    @JoinColumn(name="topic_uuid", nullable = false)
+    private TopicEnum topicEnum;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String baseQuestion;
     @Column(nullable = false, columnDefinition = "TEXT")

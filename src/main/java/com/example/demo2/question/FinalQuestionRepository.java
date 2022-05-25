@@ -7,5 +7,5 @@ import java.util.UUID;
 
 
 public interface FinalQuestionRepository extends JpaRepository<FinalQuestionEntity, UUID> {
-    List<FinalQuestionEntity> findAllByTopic(String topic);
+    List<FinalQuestionEntity> findAllByTopicEnum(String topic);
 }
