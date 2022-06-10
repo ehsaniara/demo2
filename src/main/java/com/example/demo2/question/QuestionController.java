@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/questionBank")
 @AllArgsConstructor
 public class QuestionController {
@@ -37,6 +38,16 @@ public class QuestionController {
     @GetMapping("/finalQuestions")
     public List<FinalQuestionResDto> getFinalQuestions() {
         return questionService.getFinalQuestionsList();
+    }
+
+    @GetMapping("/topics")
+    public List<TopicEntity> getTopics() {
+        return questionService.getAllTopics();
+    }
+
+    @PostMapping("/topics")
+    public List<TopicEntity> seedTopics() {
+        return questionService.seedTopicRepository();
     }
 
     @GetMapping("/finalQuestions/{topic}")

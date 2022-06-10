@@ -29,11 +29,13 @@ class QuestionServiceTest {
     @Mock
     FinalQuestionRepository finalQuestionRepository;
     @Mock
+    TopicRepository topicRepository;
+    @Mock
     QuestionMapper questionMapper;
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionTemplateRepository, finalQuestionRepository, questionMapper);
+        questionService = new QuestionService(questionTemplateRepository, finalQuestionRepository, topicRepository, questionMapper);
     }
 
     @Test
@@ -48,7 +50,7 @@ class QuestionServiceTest {
         List<VariableDto> variables = new ArrayList<>();
         variables.add(new VariableDto("H", 0d, 10d, 2d, new ArrayList<>()));
         QuestionCreateDto questionCreateDto = new QuestionCreateDto (
-                "free fall",
+                TopicEnum.ACCELERATION,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
                 "sec",
@@ -57,14 +59,14 @@ class QuestionServiceTest {
         );
         QuestionTemplateEntity questionTemplateEntity = new QuestionTemplateEntity(
                 uuid,
-                "free fall",
+                TopicEnum.ACCELERATION,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
                 "sec"
         );
         QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
                 uuid,
-                "free fall",
+                TopicEnum.ACCELERATION,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
                 "sec"

@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class QuestionCreateResDto {
     private UUID questionTemplateUuid;
-    private String topic;
+    private TopicEnum topicEnum;
     private String baseQuestion;
     private String solutionEquation;
     private String solutionUnit;
