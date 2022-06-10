@@ -22,7 +22,7 @@ public class QuestionCreateDto {
     private String solutionEquation;
     @NotEmpty(message = "Solution unit is mandatory")
     private String solutionUnit;
-    @NotEmpty(message = "Variable List is mandatory")
+//    @NotEmpty(message = "Variable List is mandatory")
     private List<VariableDto> variables;
 
 }

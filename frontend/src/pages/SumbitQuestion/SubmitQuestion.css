@@ -1,15 +1,11 @@
-.search-body {
-    padding: 2em;
-}
-
-.unit-container {
+.form-container {
     background: #F0FAF4;
     margin: 1em;
     padding: 1em;
     border-radius: .5em;
     border: #184E2A solid 1px;
-}
-
-.topics-container {
-    margin: 1em;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }

@@ -17,21 +17,21 @@ public enum TopicEnum {
     KINETIC_AND_POTENTIAL_ENERGY("Kinetic and Potential Energy", UnitEnum.INTRO_TO_KINEMATICS),
     MOMENTUM("Momentum", UnitEnum.INTRO_TO_KINEMATICS),
     //Intro to Waves
-    WAVE_PERIODIC_MOTION("Periodic Motion", UnitEnum.INTRO_TO_WAVE_MECHANICS),
-    WAVE_TRAVELING_WAVES("Traveling Waves", UnitEnum.INTRO_TO_WAVE_MECHANICS),
-    WAVE_WAVE_INTERFERENCE("Wave Interference", UnitEnum.INTRO_TO_WAVE_MECHANICS),
-    WAVE_RESONANCE("Resonance", UnitEnum.INTRO_TO_WAVE_MECHANICS),
+    PERIODIC_MOTION("Periodic Motion", UnitEnum.INTRO_TO_WAVE_MECHANICS),
+    TRAVELING_WAVES("Traveling Waves", UnitEnum.INTRO_TO_WAVE_MECHANICS),
+    WAVE_INTERFERENCE("Wave Interference", UnitEnum.INTRO_TO_WAVE_MECHANICS),
+    RESONANCE("Resonance", UnitEnum.INTRO_TO_WAVE_MECHANICS),
     //Intro to E and M
-    IELM_CIRCUIT_ELEMENTS("Resistors, Capacitors, and Inductors", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
-    IELM_ELECTRIC_CHARGE("Electric Charge", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
-    IELM_COULOMBS_LAW("Coulombs Law", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
+    CIRCUIT_ELEMENTS("Resistors, Capacitors, and Inductors", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
+    ELECTRIC_CHARGE("Electric Charge", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
+    COULOMBS_LAW("Coulombs Law", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
     //Classical Mechanics
     //Statistical Mechanics
     //String Theory
-    STRI_TRANSFORMATIONS("Galilean and Lorentz Transformations", UnitEnum.STRING_THEORY),
-    STRI_LENGTH_CONTRACTION("Length Contraction", UnitEnum.STRING_THEORY),
-    STRI_TIME_DILATION("Time Dilation", UnitEnum.STRING_THEORY),
-    STRI_RELATIVISTIC_MASS("Relativistic Mass", UnitEnum.STRING_THEORY);
+    TRANSFORMATIONS("Galilean and Lorentz Transformations", UnitEnum.STRING_THEORY),
+    LENGTH_CONTRACTION("Length Contraction", UnitEnum.STRING_THEORY),
+    TIME_DILATION("Time Dilation", UnitEnum.STRING_THEORY),
+    RELATIVISTIC_MASS("Relativistic Mass", UnitEnum.STRING_THEORY);
     //Quantum Mechanics
 
     public String label;

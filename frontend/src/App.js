@@ -40,7 +40,7 @@ export default function App({axios}) {
                 <Route exact path='/' element={<Home/>}/>
                 <Route path='/search' element={<Search axios={axios} topics={topics} topicStatus={topicsStatus}/>}/>
                 <Route path='/attemptSolution' element={<AttemptSolution/>}/>
-                <Route path='/submitQuestion' element={<SubmitQuestion/>}/>
+                <Route path='/submitQuestion' element={<SubmitQuestion axios={axios}/>}/>
             </Routes>
         </Router>
     )
