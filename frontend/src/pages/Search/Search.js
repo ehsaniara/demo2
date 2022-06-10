@@ -44,6 +44,5 @@ export default function Search({topics, topicStatus}) {
                 {renderCategories()}
             </div>
         </div>
-
     )
 }
