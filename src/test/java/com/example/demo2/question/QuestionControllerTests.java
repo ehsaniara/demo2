@@ -53,6 +53,7 @@ public class QuestionControllerTests {
         variables.add(new VariableDto("H", 3d, 15d, 2d, null));
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto(
+                UnitEnum.INTRO_TO_KINEMATICS,
                 TopicEnum.ACCELERATION,
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
                 "( H / 4.9 ) ^ 0.5 )",
@@ -61,6 +62,7 @@ public class QuestionControllerTests {
         );
         QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
                 UUID.randomUUID(),
+                UnitEnum.INTRO_TO_KINEMATICS,
                 TopicEnum.ACCELERATION,
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
                 "( H / 4.9 ) ^ 0.5 )",
@@ -80,6 +82,7 @@ public class QuestionControllerTests {
         List<VariableDto> variables = new ArrayList<>();
         variables.add(new VariableDto("H", 3d, 15d, 2d, null));
         QuestionCreateDto questionCreateDto = new QuestionCreateDto(
+                UnitEnum.INTRO_TO_KINEMATICS,
                 TopicEnum.ACCELERATION,
                 null,
                 "( H / 4.9 ) ^ 0.5 )",

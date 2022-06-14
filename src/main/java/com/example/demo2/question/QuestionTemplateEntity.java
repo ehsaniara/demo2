@@ -18,6 +18,8 @@ public class QuestionTemplateEntity {
     @Id
     @GeneratedValue
     private UUID questionTemplateUuid;
+    @Column(nullable = false)
+    private UnitEnum unitEnum;
     @JoinColumn(name="topic_uuid", nullable = false)
     private TopicEnum topicEnum;
     @Column(nullable = false, columnDefinition = "TEXT")

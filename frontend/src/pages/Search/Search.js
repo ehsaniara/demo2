@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+import React from 'react'
 import './Search.css'
 import {loadingStatuses} from "../../loadingStatuses";
 
-export default function Search({topics, topicStatus}) {
+export default function Search({units, topics, topicStatus}) {
     const renderCategories = () => {
         if (topicStatus === loadingStatuses.isLoading) {
             return <>loading</>
@@ -10,23 +10,15 @@ export default function Search({topics, topicStatus}) {
             return <>failed to load</>
         } else {
             return renderUnits()
-
         }
     }
 
     const renderUnits = () => {
-        let units = []
-        topics.map(topic => {
-            if (units[units.length - 1] !== topic.unit) {
-                units.push(topic.unit)
-            }
-        })
-
         return units.map(unit =>
-            <div key={unit} className="unit-container">
-                <h3 className="unit-title">{unit}</h3>
+            <div key={unit.unitEnum} className="unit-container">
+                <h3 className="unit-title">{unit.unit}</h3>
                 <div className="topics-container">
-                    {renderTopics(unit)}
+                    {renderTopics(unit.unit)}
                 </div>
             </div>
         )

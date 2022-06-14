@@ -50,6 +50,7 @@ class QuestionServiceTest {
         List<VariableDto> variables = new ArrayList<>();
         variables.add(new VariableDto("H", 0d, 10d, 2d, new ArrayList<>()));
         QuestionCreateDto questionCreateDto = new QuestionCreateDto (
+                UnitEnum.INTRO_TO_KINEMATICS,
                 TopicEnum.ACCELERATION,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
@@ -59,6 +60,7 @@ class QuestionServiceTest {
         );
         QuestionTemplateEntity questionTemplateEntity = new QuestionTemplateEntity(
                 uuid,
+                UnitEnum.INTRO_TO_KINEMATICS,
                 TopicEnum.ACCELERATION,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
@@ -66,6 +68,7 @@ class QuestionServiceTest {
         );
         QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
                 uuid,
+                UnitEnum.INTRO_TO_KINEMATICS,
                 TopicEnum.ACCELERATION,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",

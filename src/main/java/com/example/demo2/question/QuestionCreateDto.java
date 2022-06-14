@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionCreateDto {
+    @NotNull(message = "Unit is mandatory")
+    private UnitEnum unitEnum;
     @NotNull( message = "Topic is mandatory")
     private TopicEnum topicEnum;
     @NotEmpty(message = "Base Question is mandatory")
