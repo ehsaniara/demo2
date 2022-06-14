@@ -40,6 +40,15 @@ export default function SubmitQuestion({axios}) {
         <div>
             <div>
                 <h2>Ask a Question</h2>
+                <p>To submit a question you need the following items:</p>
+                <ul>
+                    <li>unitEnum</li>
+                    <li>topicEnum - will need to change this to list of topics</li>
+                    <li>baseQuestion</li>
+                    <li>solutionEquation</li>
+                    <li>solutionUnit</li>
+                    <li>List of variables</li>
+                </ul>
             </div>
             <div className="form-container">
                 <div className="submit-question-text-field full-size">
