@@ -10,6 +10,7 @@ public enum TopicEnum {
     SCALAR_AND_VECTOR_QUANTITIES("Scalar and Vectors", UnitEnum.INTRO_TO_KINEMATICS),
     PROJECTILE_MOTION("Projectile motion", UnitEnum.INTRO_TO_KINEMATICS),
     NEWTONS_LAWS_OF_MOTION("Newton's Laws of Motion", UnitEnum.INTRO_TO_KINEMATICS),
+    FORCES("Forces", UnitEnum.INTRO_TO_KINEMATICS),
     NORMAL_FORCES("Normal Forces", UnitEnum.INTRO_TO_KINEMATICS),
     STATIC_AND_KINETIC_FRICTION("Static and Kinetic Friction", UnitEnum.INTRO_TO_KINEMATICS),
     GRAVITATIONAL_FORCES("Gravitational Forces", UnitEnum.INTRO_TO_KINEMATICS),
@@ -24,14 +25,14 @@ public enum TopicEnum {
     //Intro to E and M
     CIRCUIT_ELEMENTS("Resistors, Capacitors, and Inductors", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
     ELECTRIC_CHARGE("Electric Charge", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
-    COULOMBS_LAW("Coulombs Law", UnitEnum.INTRO_TO_ELECTROMAGNETICS),
+    COULOMBS_LAW("Coulombs Law", UnitEnum.INTRO_TO_ELECTROMAGNETICS);
     //Classical Mechanics
     //Statistical Mechanics
     //String Theory
-    TRANSFORMATIONS("Galilean and Lorentz Transformations", UnitEnum.STRING_THEORY),
-    LENGTH_CONTRACTION("Length Contraction", UnitEnum.STRING_THEORY),
-    TIME_DILATION("Time Dilation", UnitEnum.STRING_THEORY),
-    RELATIVISTIC_MASS("Relativistic Mass", UnitEnum.STRING_THEORY);
+//    TRANSFORMATIONS("Galilean and Lorentz Transformations", UnitEnum.STRING_THEORY),
+//    LENGTH_CONTRACTION("Length Contraction", UnitEnum.STRING_THEORY),
+//    TIME_DILATION("Time Dilation", UnitEnum.STRING_THEORY),
+//    RELATIVISTIC_MASS("Relativistic Mass", UnitEnum.STRING_THEORY);
     //Quantum Mechanics
 
     public String label;

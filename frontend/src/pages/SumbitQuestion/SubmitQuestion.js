@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./SubmitQuestion.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -11,12 +11,17 @@ import Checkbox from '@mui/material/Checkbox';
 import {serverURL} from "../../serverURL";
 import {loadingStatuses} from "../../loadingStatuses";
 
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 export default function SubmitQuestion({axios, units, topics, topicStatus}) {
     const [questionUnit, setQuestionUnit] = useState('')
+    const [topicList, setTopicList] = useState([])
     const [question, setQuestion] = useState('')
     const [solutionUnit, setSolutionUnit] = useState('')
-    const questionTopics = new Set()
 
     const handleChange = (e) => {
         const name = e.target.name
@@ -29,15 +34,18 @@ export default function SubmitQuestion({axios, units, topics, topicStatus}) {
                 break;
             case "unit":
                 setQuestionUnit(e.target.value)
-                console.log([...questionTopics])
                 break;
             case "topic":
-                e.target.checked ? questionTopics.add(e.target.id) : questionTopics.delete(e.target.id)
-                console.log([...questionTopics])
+                if (e.target.checked) {
+                    setTopicList([...topicList, {topicUuid: e.target.value, topicEnum: e.target.id}])
+                } else {
+                    let checkedTopics = topicList.filter(value => {
+                        return e.target.id !== value.topicEnum
+                    })
+                    setTopicList(checkedTopics)
+                }
                 break;
-
         }
-
     }
 
     const renderUnitRadioOptions = () => {
@@ -47,30 +55,44 @@ export default function SubmitQuestion({axios, units, topics, topicStatus}) {
             return <>failed to load</>
         } else {
             return (
-                <FormControl>
-                    <FormLabel id="unit-radio-buttons-group-label">Unit</FormLabel>
+                <FormControl fullWidth={true}>
+                    <FormLabel id="unit-radio-buttons-group-label">Physics Unit with Topics</FormLabel>
                     <RadioGroup
                         name="unit"
                         onChange={handleChange}
                     >
                         {units.map(unit => (
                             <div key={unit.unitEnum}>
-                                <FormControlLabel
-                                    value={unit.unitEnum}
-                                    control={<Radio/>}
-                                    label={unit.unit}
-                                />
-                                <div className="topics-container">
-                                    {topics
-                                        .filter(topic => topic.unitEnum === unit.unitEnum)
-                                        .map(topic =>
-                                            <FormControlLabel
-                                                key={topic.topicEnum}
-                                                control={<Checkbox id={topic.topicEnum} name="topic" onChange={handleChange}/>}
-                                                label={topic.topic}
-                                            />
-                                        )}
-                                </div>
+                                <Accordion>
+                                    <div className="accordion-unit">
+                                        <FormControlLabel
+                                            value={unit.unitEnum}
+                                            control={<Radio/>}
+                                            label={unit.unit}
+                                            className="accordion-unit-label"
+                                        />
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon/>}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                        >
+                                        </AccordionSummary>
+                                    </div>
+                                    <AccordionDetails>
+                                        <div className="topics-container">
+                                            {topics
+                                                .filter(topic => topic.unitEnum === unit.unitEnum)
+                                                .map(topic =>
+                                                    <div key={topic.topicEnum}>
+                                                        <Checkbox id={topic.topicEnum} value={topic.topicUuid}
+                                                                  name="topic"
+                                                                  onChange={handleChange}/>
+                                                        {topic.topic}
+                                                    </div>
+                                                )}
+                                        </div>
+                                    </AccordionDetails>
+                                </Accordion>
                             </div>
                         ))}
                     </RadioGroup>
@@ -79,22 +101,15 @@ export default function SubmitQuestion({axios, units, topics, topicStatus}) {
         }
     }
 
-    const renderTopics = () => {
-        return
-
-
-    }
-
     const onSubmit = () => {
         let reqBody = {
             unitEnum: questionUnit,
-            topicEnum: "SCALAR_AND_VECTOR_QUANTITIES",
+            topicEntityList: topicList,
             baseQuestion: question,
             solutionEquation: "1 + 2",
             solutionUnit: solutionUnit,
             variables: [],
         }
-        console.log(reqBody)
         axios.post(`${serverURL}/questionTemplates`, reqBody)
             .then(res => console.log(res))
             .catch(err => console.log(err))
@@ -106,11 +121,7 @@ export default function SubmitQuestion({axios, units, topics, topicStatus}) {
             <>
                 <p>To submit a question you need the following items:</p>
                 <ul>
-                    <li>unitEnum</li>
-                    <li>topicEnum - will need to change this to list of topics</li>
-                    <li>baseQuestion</li>
                     <li>solutionEquation</li>
-                    <li>solutionUnit</li>
                     <li>List of variables</li>
                 </ul>
             </>
@@ -118,7 +129,7 @@ export default function SubmitQuestion({axios, units, topics, topicStatus}) {
     }
 
     return (
-        <div>
+        <div className="submit-question-body">
             <div>
                 <h2>Ask a Question</h2>
                 {listOfItemsToInclude()}

@@ -3,6 +3,7 @@ package com.example.demo2.question;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @ToString
@@ -20,17 +21,8 @@ public class TopicEntity {
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private TopicEnum topicEnum;
-    @Column(nullable = false)
-    private String topic;
-    @Column(nullable = false)
-    private int topicOrdinal;
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private UnitEnum unitEnum;
-    @Column(nullable = false)
-    private String unit;
-    @Column(nullable = false)
-    private int unitOrdinal;
+    @ManyToMany(mappedBy = "topicEntityList")
+    private List<QuestionTemplateEntity> questionTemplateEntityList;
 }
 
 

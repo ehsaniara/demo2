@@ -26,11 +26,7 @@ public class QuestionService {
             topicEntities.add(new TopicEntity(
                     null,
                     topic,
-                    topic.getLabel(),
-                    topic.ordinal(),
-                    topic.getUnit(),
-                    topic.getUnit().getLabel(),
-                    topic.getUnit().ordinal()));
+                    new ArrayList<>()));
         }
 
         return topicRepository.saveAll(topicEntities);
@@ -60,8 +56,8 @@ public class QuestionService {
         return questionMapper.questionToDto(questionTemplateEntity);
     }
 
-    public void verifyVariableDtoInputs (List<VariableDto> variableDtos) {
-        for(VariableDto variableDto : variableDtos) {
+    public void verifyVariableDtoInputs(List<VariableDto> variableDtos) {
+        for (VariableDto variableDto : variableDtos) {
             if (variableDto.getMin() != null && variableDto.getMax() == null) {
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Min and Max must be provided"
@@ -85,7 +81,7 @@ public class QuestionService {
         }
     }
 
-    public List<FinalQuestionEntity> generateFinalEntities (QuestionTemplateEntity questionTemplate, List<VariableDto> variables) {
+    public List<FinalQuestionEntity> generateFinalEntities(QuestionTemplateEntity questionTemplate, List<VariableDto> variables) {
         generateVariableValues(variables);
 
         int numOfVariations = 1;
@@ -104,15 +100,15 @@ public class QuestionService {
         );
 
         // solve equation
-        for(FinalQuestionEntity questionEntity: finalQuestionEntities) {
+        for (FinalQuestionEntity questionEntity : finalQuestionEntities) {
             questionEntity.setResult(calculateResult(questionEntity.getFinalEquation()));
         }
 
         return finalQuestionEntities;
     }
 
-    public void generateVariableValues (List<VariableDto> variables) {
-        for (VariableDto variable: variables) {
+    public void generateVariableValues(List<VariableDto> variables) {
+        for (VariableDto variable : variables) {
             if (variable.getMin() != null) {
                 if (variable.getInterval() == null) {
                     variable.setInterval(1d);
@@ -124,7 +120,7 @@ public class QuestionService {
         }
     }
 
-    public List<FinalQuestionEntity> applySearchAndReplace (
+    public List<FinalQuestionEntity> applySearchAndReplace(
             QuestionTemplateEntity questionTemplate,
             String currentQuestion,
             String currentEquation,
@@ -135,12 +131,11 @@ public class QuestionService {
         if (variablesIndex >= variables.size()) {
             results.add(FinalQuestionEntity.builder()
                     .questionTemplate(questionTemplate)
-                    .topicEnum(questionTemplate.getTopicEnum())
                     .finalQuestion(currentQuestion)
                     .finalEquation(currentEquation)
                     .build()
             );
-            return  results;
+            return results;
         } else {
             int valuesLength = variables.get(variablesIndex).getValues().size();
             for (int i = 0; i < valuesLength; i++) {
@@ -159,9 +154,8 @@ public class QuestionService {
     }
 
     public Double calculateResult(String equation) {
-        try(PythonInterpreter pythonInterpreter = new PythonInterpreter()) {
+        try (PythonInterpreter pythonInterpreter = new PythonInterpreter()) {
             PyObject result = pythonInterpreter.eval(equation);
-            System.out.println("the result is: " + result);
             return result.asDouble();
         }
     }
@@ -178,15 +172,27 @@ public class QuestionService {
         return finalQuestionResDtos;
     }
 
-    public List<FinalQuestionResDto> getFinalQuestionsListByTopic(String topic) {
-        List<FinalQuestionEntity> finalQuestionEntities = finalQuestionRepository.findAllByTopicEnum(topic);
-        List<FinalQuestionResDto> finalQuestionResDtos = new ArrayList<>();
-        finalQuestionEntities.forEach(entity -> finalQuestionResDtos.add(questionMapper.finalQuestionEntityToDto(entity)));
-        return finalQuestionResDtos;
-    }
+//    public List<FinalQuestionResDto> getFinalQuestionsListByTopic(String topic) {
+//        List<FinalQuestionEntity> finalQuestionEntities = finalQuestionRepository.findAllByTopicEnum(topic);
+//        List<FinalQuestionResDto> finalQuestionResDtos = new ArrayList<>();
+//        finalQuestionEntities.forEach(entity -> finalQuestionResDtos.add(questionMapper.finalQuestionEntityToDto(entity)));
+//        return finalQuestionResDtos;
+//    }
 
-    public List<TopicEntity> getAllTopics() {
-        Sort sort = Sort.by(Sort.Direction.ASC, "unitOrdinal", "topicOrdinal");
-        return topicRepository.findAll(sort);
+    public List<TopicResDto> getAllTopics() {
+        List<TopicEntity> topicEntities = topicRepository.findAll();
+        List<TopicResDto> topicResDtoList = new ArrayList<>();
+
+        topicEntities.forEach((topicEntity) -> topicResDtoList.add(
+                        TopicResDto.builder()
+                                .topicUuid(topicEntity.getTopicUuid())
+                                .topicEnum(topicEntity.getTopicEnum())
+                                .topic(topicEntity.getTopicEnum().label)
+                                .topicOrdinal(topicEntity.getTopicEnum().ordinal())
+                                .unitEnum(topicEntity.getTopicEnum().unit)
+                                .unit(topicEntity.getTopicEnum().unit.label)
+                                .unitOrdinal(topicEntity.getTopicEnum().unit.ordinal())
+                .build()));
+        return topicResDtoList;
     }
 }

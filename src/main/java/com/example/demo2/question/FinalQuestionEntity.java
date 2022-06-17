@@ -22,9 +22,6 @@ public class FinalQuestionEntity {
     @JoinColumn(name="question_template_uuid", nullable = false)
     private QuestionTemplateEntity questionTemplate;
 
-    @Column()
-    @JoinColumn(name="topic_uuid", nullable = false)
-    private TopicEnum topicEnum;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String finalQuestion;
     @Column(nullable = false, columnDefinition = "TEXT")

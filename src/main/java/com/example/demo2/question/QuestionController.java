@@ -41,7 +41,7 @@ public class QuestionController {
     }
 
     @GetMapping("/topics")
-    public List<TopicEntity> getTopics() {
+    public List<TopicResDto> getTopics() {
         return questionService.getAllTopics();
     }
 
@@ -50,8 +50,8 @@ public class QuestionController {
         return questionService.seedTopicRepository();
     }
 
-    @GetMapping("/finalQuestions/{topic}")
-    public List<FinalQuestionResDto> getFinalQuestionsByTopic(@PathVariable String topic) {
-        return questionService.getFinalQuestionsListByTopic(topic);
-    }
+//    @GetMapping("/finalQuestions/{topic}")
+//    public List<FinalQuestionResDto> getFinalQuestionsByTopic(@PathVariable String topic) {
+//        return questionService.getFinalQuestionsListByTopic(topic);
+//    }
 }

@@ -3,6 +3,7 @@ package com.example.demo2.question;
 public enum UnitEnum {
     INTRO_TO_KINEMATICS("Intro to Kinematics"),
     INTRO_TO_WAVE_MECHANICS("Intro to Wave Mechanics"),
+    INTRO_TO_THERMODYNAMICS("Intro to Thermodynamics"),
     INTRO_TO_ELECTROMAGNETICS("Intro to Electro-Magnetics"),
     CLASSICAL_MECHANICS("Classical Mechanics"),
     STATISTICAL_MECHANICS("Statistical Mechanics"),

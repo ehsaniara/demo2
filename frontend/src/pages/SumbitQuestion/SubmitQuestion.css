@@ -1,3 +1,6 @@
+.submit-question-body {
+    padding: 2em
+}
 .form-container {
     background: #F0FAF4;
     margin: 1em;
@@ -12,4 +15,13 @@
 
 .submit-question-text-field, .submit-button {
     padding: .5em;
+}
+
+.accordion-unit {
+    display: flex;
+    justify-content: space-between;
+}
+
+.accordion-unit-label {
+    padding: 1em;
 }

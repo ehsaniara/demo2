@@ -17,7 +17,7 @@ public class QuestionCreateDto {
     @NotNull(message = "Unit is mandatory")
     private UnitEnum unitEnum;
     @NotNull( message = "Topic is mandatory")
-    private TopicEnum topicEnum;
+    private List<TopicEntity> topicEntityList;
     @NotEmpty(message = "Base Question is mandatory")
     private String baseQuestion;
     @NotEmpty(message = "Equation is mandatory")
@@ -26,5 +26,4 @@ public class QuestionCreateDto {
     private String solutionUnit;
 //    @NotEmpty(message = "Variable List is mandatory")
     private List<VariableDto> variables;
-
 }

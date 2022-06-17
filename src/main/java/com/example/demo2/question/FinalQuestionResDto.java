@@ -14,7 +14,6 @@ import java.util.UUID;
 public class FinalQuestionResDto {
     private UUID finalQuestionUuid;
     private QuestionTemplateEntity questionTemplate;
-    private String topic;
     private String finalQuestion;
     private String finalEquation;
     private double result;
