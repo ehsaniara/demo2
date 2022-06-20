@@ -41,6 +41,9 @@ public class QuestionService {
 
     public QuestionCreateResDto createQuestionTemplate(QuestionCreateDto questionCreateDto) {
         // check that the variableDto is valid
+        if (questionCreateDto.getVariables() == null) {
+            questionCreateDto.setVariables(new ArrayList<>());
+        }
         verifyVariableDtoInputs(questionCreateDto.getVariables());
 
         // create questionTemplate
@@ -85,24 +88,30 @@ public class QuestionService {
         generateVariableValues(variables);
 
         int numOfVariations = 1;
-        for (VariableDto variable : variables) {
-            numOfVariations *= variable.getValues().size();
-        }
+//        for (VariableDto variable : variables) {
+//            numOfVariations *= variable.getValues().size();
+//        }
 
         List<FinalQuestionEntity> finalQuestionEntities = new ArrayList<>(numOfVariations);
-        finalQuestionEntities = applySearchAndReplace(
-                questionTemplate,
-                questionTemplate.getBaseQuestion(),
-                questionTemplate.getSolutionEquation(),
-                0,
-                variables,
-                finalQuestionEntities
-        );
+        finalQuestionEntities.add(FinalQuestionEntity
+                .builder()
+                        .questionTemplate(questionTemplate)
+                        .finalQuestion(questionTemplate.getBaseQuestion())
+                .build());
+
+//        finalQuestionEntities = applySearchAndReplace(
+//                questionTemplate,
+//                questionTemplate.getBaseQuestion(),
+//                questionTemplate.getSolutionEquation(),
+//                0,
+//                variables,
+//                finalQuestionEntities
+//        );
 
         // solve equation
-        for (FinalQuestionEntity questionEntity : finalQuestionEntities) {
-            questionEntity.setResult(calculateResult(questionEntity.getFinalEquation()));
-        }
+//        for (FinalQuestionEntity questionEntity : finalQuestionEntities) {
+//            questionEntity.setResult(calculateResult(questionEntity.getFinalEquation()));
+//        }
 
         return finalQuestionEntities;
     }
@@ -120,45 +129,44 @@ public class QuestionService {
         }
     }
 
-    public List<FinalQuestionEntity> applySearchAndReplace(
-            QuestionTemplateEntity questionTemplate,
-            String currentQuestion,
-            String currentEquation,
-            int variablesIndex,
-            List<VariableDto> variables,
-            List<FinalQuestionEntity> results
-    ) {
-        if (variablesIndex >= variables.size()) {
-            results.add(FinalQuestionEntity.builder()
-                    .questionTemplate(questionTemplate)
-                    .finalQuestion(currentQuestion)
-                    .finalEquation(currentEquation)
-                    .build()
-            );
-            return results;
-        } else {
-            int valuesLength = variables.get(variablesIndex).getValues().size();
-            for (int i = 0; i < valuesLength; i++) {
-                String updateQuestion = currentQuestion.replaceAll(
-                        "&" + variables.get(variablesIndex).getName() + "&",
-                        String.valueOf(variables.get(variablesIndex).getValues().get(i))
-                );
-                String updateEquation = currentEquation.replaceAll(
-                        "&" + variables.get(variablesIndex).getName() + "&",
-                        String.valueOf(variables.get(variablesIndex).getValues().get(i))
-                );
-                applySearchAndReplace(questionTemplate, updateQuestion, updateEquation, variablesIndex + 1, variables, results);
-            }
-        }
-        return results;
-    }
+//    public List<FinalQuestionEntity> applySearchAndReplace(
+//            QuestionTemplateEntity questionTemplate,
+//            String currentQuestion,
+//            String currentEquation,
+//            int variablesIndex,
+//            List<VariableDto> variables,
+//            List<FinalQuestionEntity> results
+//    ) {
+//        if (variablesIndex >= variables.size()) {
+//            results.add(FinalQuestionEntity.builder()
+//                    .questionTemplate(questionTemplate)
+//                    .finalQuestion(currentQuestion)
+//                    .build()
+//            );
+//            return results;
+//        } else {
+//            int valuesLength = variables.get(variablesIndex).getValues().size();
+//            for (int i = 0; i < valuesLength; i++) {
+//                String updateQuestion = currentQuestion.replaceAll(
+//                        "&" + variables.get(variablesIndex).getName() + "&",
+//                        String.valueOf(variables.get(variablesIndex).getValues().get(i))
+//                );
+//                String updateEquation = currentEquation.replaceAll(
+//                        "&" + variables.get(variablesIndex).getName() + "&",
+//                        String.valueOf(variables.get(variablesIndex).getValues().get(i))
+//                );
+//                applySearchAndReplace(questionTemplate, updateQuestion, updateEquation, variablesIndex + 1, variables, results);
+//            }
+//        }
+//        return results;
+//    }
 
-    public Double calculateResult(String equation) {
-        try (PythonInterpreter pythonInterpreter = new PythonInterpreter()) {
-            PyObject result = pythonInterpreter.eval(equation);
-            return result.asDouble();
-        }
-    }
+//    public Double calculateResult(String equation) {
+//        try (PythonInterpreter pythonInterpreter = new PythonInterpreter()) {
+//            PyObject result = pythonInterpreter.eval(equation);
+//            return result.asDouble();
+//        }
+//    }
 
     public void deleteAllFinalQuestionsAndQuestionTemplates() {
         finalQuestionRepository.deleteAll();

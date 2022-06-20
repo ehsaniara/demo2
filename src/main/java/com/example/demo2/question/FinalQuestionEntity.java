@@ -24,8 +24,8 @@ public class FinalQuestionEntity {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String finalQuestion;
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String finalEquation;
-    @Column(nullable = false)
-    private double result;
+//    @Column(nullable = false, columnDefinition = "TEXT")
+//    private String finalEquation;
+//    @Column(nullable = false)
+//    private double result;
 }

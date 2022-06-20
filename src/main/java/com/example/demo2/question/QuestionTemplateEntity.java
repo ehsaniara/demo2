@@ -29,7 +29,7 @@ public class QuestionTemplateEntity {
     private List<TopicEntity> topicEntityList;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String baseQuestion;
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String solutionEquation;
     private String solutionUnit;
 
