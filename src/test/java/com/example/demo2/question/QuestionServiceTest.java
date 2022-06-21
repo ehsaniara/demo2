@@ -49,9 +49,12 @@ class QuestionServiceTest {
         UUID uuid = UUID.randomUUID();
         List<VariableDto> variables = new ArrayList<>();
         variables.add(new VariableDto("H", 0d, 10d, 2d, new ArrayList<>()));
+        List<TopicEntity> topicEntities = new ArrayList<>();
+        topicEntities.add(TopicEntity.builder().topicEnum(TopicEnum.ACCELERATION).build());
+
         QuestionCreateDto questionCreateDto = new QuestionCreateDto (
                 UnitEnum.INTRO_TO_KINEMATICS,
-                TopicEnum.ACCELERATION,
+                topicEntities,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
                 "sec",
@@ -61,7 +64,7 @@ class QuestionServiceTest {
         QuestionTemplateEntity questionTemplateEntity = new QuestionTemplateEntity(
                 uuid,
                 UnitEnum.INTRO_TO_KINEMATICS,
-                TopicEnum.ACCELERATION,
+                topicEntities,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
                 "sec"
@@ -69,7 +72,7 @@ class QuestionServiceTest {
         QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
                 uuid,
                 UnitEnum.INTRO_TO_KINEMATICS,
-                TopicEnum.ACCELERATION,
+                topicEntities,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
                 "(&H& / 4.9) ** 0.5",
                 "sec"
@@ -123,30 +126,6 @@ class QuestionServiceTest {
     }
 
     @Test
-    void createQuestionTemplate_buildsFinalQuestions() {
-        String baseQuestion = "foo &F& bar &B& and foo again &F&";
-        String baseEquation = "2 * &F& + &B&";
-        List<VariableDto> variables = new ArrayList<>();
-        variables.add(VariableDto.builder().name("F").min(0d).max(9d).values(new ArrayList<>()).build()); // 10 values
-        variables.add(VariableDto.builder().name("B").values(new ArrayList<>(Arrays.asList(10d, 20d))).build()); // 2 values
-        QuestionTemplateEntity questionTemplate = QuestionTemplateEntity.builder().baseQuestion(baseQuestion).solutionEquation(baseEquation).build();
-        List<FinalQuestionEntity> actualResult = questionService.generateFinalEntities(questionTemplate, variables);
-
-        assertThat(actualResult).hasSize(20);
-        assertThat(actualResult.get(0).getFinalQuestion()).doesNotContain("&F&", "&B&");
-        assertThat(actualResult.get(0).getFinalEquation()).doesNotContain("&F&", "&B&");
-    }
-
-    @Test
-    void calculateEquationResult() {
-        String equation = "2 * 3 + 4";
-        Double actualResult = questionService.calculateResult(equation);
-        Double expected = 10d;
-
-        assertThat(actualResult).isEqualTo(expected);
-    }
-
-    @Test
     void deleteAllQuestionTemplates() {
         questionService.deleteAllFinalQuestionsAndQuestionTemplates();
         verify(questionTemplateRepository).deleteAll();
@@ -158,12 +137,6 @@ class QuestionServiceTest {
 
         assertThat(finalQuestionResDtos).isNotNull();
         verify(finalQuestionRepository).findAll();
-    }
-
-    //TODO
-    @Test
-    @Disabled("TODO")
-    void deleteAllQuestions() {
     }
 
 }

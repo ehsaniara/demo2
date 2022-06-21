@@ -51,10 +51,12 @@ public class QuestionControllerTests {
 
         List<VariableDto> variables = new ArrayList<>();
         variables.add(new VariableDto("H", 3d, 15d, 2d, null));
+        List<TopicEntity> topicEntities = new ArrayList<>();
+        topicEntities.add(TopicEntity.builder().topicEnum(TopicEnum.ACCELERATION).build());
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto(
                 UnitEnum.INTRO_TO_KINEMATICS,
-                TopicEnum.ACCELERATION,
+                topicEntities,
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
                 "( H / 4.9 ) ^ 0.5 )",
                 "sec",
@@ -63,7 +65,7 @@ public class QuestionControllerTests {
         QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
                 UUID.randomUUID(),
                 UnitEnum.INTRO_TO_KINEMATICS,
-                TopicEnum.ACCELERATION,
+                topicEntities,
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
                 "( H / 4.9 ) ^ 0.5 )",
                 "sec"
@@ -81,9 +83,12 @@ public class QuestionControllerTests {
     void postQuestionTemplate_invalidParameters_returnBadRequest() throws Exception {
         List<VariableDto> variables = new ArrayList<>();
         variables.add(new VariableDto("H", 3d, 15d, 2d, null));
+        List<TopicEntity> topicEntities = new ArrayList<>();
+        topicEntities.add(TopicEntity.builder().topicEnum(TopicEnum.ACCELERATION).build());
+
         QuestionCreateDto questionCreateDto = new QuestionCreateDto(
                 UnitEnum.INTRO_TO_KINEMATICS,
-                TopicEnum.ACCELERATION,
+                topicEntities,
                 null,
                 "( H / 4.9 ) ^ 0.5 )",
                 "sec",
