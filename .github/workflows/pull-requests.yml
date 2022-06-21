@@ -1,7 +1,6 @@
 name: Run Gradle on PRs
 on:
   pull_request:
-    types: [opened, reopened]
 
 jobs:
   gradle:
