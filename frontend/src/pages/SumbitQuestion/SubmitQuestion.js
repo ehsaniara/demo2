@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import "./SubmitQuestion.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -45,6 +45,7 @@ export default function SubmitQuestion({axios, units, topics, topicStatus}) {
                     setTopicList(checkedTopics)
                 }
                 break;
+            default:
         }
     }
 
@@ -115,24 +116,10 @@ export default function SubmitQuestion({axios, units, topics, topicStatus}) {
             .catch(err => console.log(err))
     }
 
-    //TODO: Delete when complete
-    const listOfItemsToInclude = () => {
-        return (
-            <>
-                <p>To submit a question you need the following items:</p>
-                <ul>
-                    <li>solutionEquation</li>
-                    <li>List of variables</li>
-                </ul>
-            </>
-        )
-    }
-
     return (
         <div className="submit-question-body">
             <div>
-                <h2>Ask a Question</h2>
-                {listOfItemsToInclude()}
+                <h2>Ask a Question to Your Peers</h2>
             </div>
             <div className="form-container">
                 <div className="unit-options-container">
