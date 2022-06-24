@@ -1,15 +1,14 @@
 package com.example.demo2.question;
 
 import lombok.AllArgsConstructor;
-import org.python.core.PyObject;
-import org.python.util.PythonInterpreter;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -40,22 +39,7 @@ public class QuestionService {
     }
 
     public QuestionCreateResDto createQuestionTemplate(QuestionCreateDto questionCreateDto) {
-        // check that the variableDto is valid
-        if (questionCreateDto.getVariables() == null) {
-            questionCreateDto.setVariables(new ArrayList<>());
-        }
-        verifyVariableDtoInputs(questionCreateDto.getVariables());
-
-        // create questionTemplate
-        // TODO: XSS?
         QuestionTemplateEntity questionTemplateEntity = questionTemplateRepository.save(questionMapper.dtoToEntity(questionCreateDto));
-
-        // create finalQuestion with correct question, solution string, and result
-        List<FinalQuestionEntity> finalQuestionEntities = generateFinalEntities(questionTemplateEntity, questionCreateDto.getVariables());
-
-        // batch save final questions and save question template
-        finalQuestionRepository.saveAll(finalQuestionEntities);
-        // return question template and meta-data about the final question (what should this look like?)
         return questionMapper.questionToDto(questionTemplateEntity);
     }
 
@@ -84,90 +68,6 @@ public class QuestionService {
         }
     }
 
-    public List<FinalQuestionEntity> generateFinalEntities(QuestionTemplateEntity questionTemplate, List<VariableDto> variables) {
-        generateVariableValues(variables);
-
-        int numOfVariations = 1;
-//        for (VariableDto variable : variables) {
-//            numOfVariations *= variable.getValues().size();
-//        }
-
-        List<FinalQuestionEntity> finalQuestionEntities = new ArrayList<>(numOfVariations);
-        finalQuestionEntities.add(FinalQuestionEntity
-                .builder()
-                        .questionTemplate(questionTemplate)
-                        .finalQuestion(questionTemplate.getBaseQuestion())
-                .build());
-
-//        finalQuestionEntities = applySearchAndReplace(
-//                questionTemplate,
-//                questionTemplate.getBaseQuestion(),
-//                questionTemplate.getSolutionEquation(),
-//                0,
-//                variables,
-//                finalQuestionEntities
-//        );
-
-        // solve equation
-//        for (FinalQuestionEntity questionEntity : finalQuestionEntities) {
-//            questionEntity.setResult(calculateResult(questionEntity.getFinalEquation()));
-//        }
-
-        return finalQuestionEntities;
-    }
-
-    public void generateVariableValues(List<VariableDto> variables) {
-        for (VariableDto variable : variables) {
-            if (variable.getMin() != null) {
-                if (variable.getInterval() == null) {
-                    variable.setInterval(1d);
-                }
-                for (Double value = variable.getMin(); value <= variable.getMax(); value = value + variable.getInterval()) {
-                    variable.getValues().add(value);
-                }
-            }
-        }
-    }
-
-//    public List<FinalQuestionEntity> applySearchAndReplace(
-//            QuestionTemplateEntity questionTemplate,
-//            String currentQuestion,
-//            String currentEquation,
-//            int variablesIndex,
-//            List<VariableDto> variables,
-//            List<FinalQuestionEntity> results
-//    ) {
-//        if (variablesIndex >= variables.size()) {
-//            results.add(FinalQuestionEntity.builder()
-//                    .questionTemplate(questionTemplate)
-//                    .finalQuestion(currentQuestion)
-//                    .build()
-//            );
-//            return results;
-//        } else {
-//            int valuesLength = variables.get(variablesIndex).getValues().size();
-//            for (int i = 0; i < valuesLength; i++) {
-//                String updateQuestion = currentQuestion.replaceAll(
-//                        "&" + variables.get(variablesIndex).getName() + "&",
-//                        String.valueOf(variables.get(variablesIndex).getValues().get(i))
-//                );
-//                String updateEquation = currentEquation.replaceAll(
-//                        "&" + variables.get(variablesIndex).getName() + "&",
-//                        String.valueOf(variables.get(variablesIndex).getValues().get(i))
-//                );
-//                applySearchAndReplace(questionTemplate, updateQuestion, updateEquation, variablesIndex + 1, variables, results);
-//            }
-//        }
-//        return results;
-//    }
-
-//    public Double calculateResult(String equation) {
-//        try (PythonInterpreter pythonInterpreter = new PythonInterpreter()) {
-//            PyObject result = pythonInterpreter.eval(equation);
-//            return result.asDouble();
-//        }
-//    }
-
     public void deleteAllFinalQuestionsAndQuestionTemplates() {
         finalQuestionRepository.deleteAll();
         questionTemplateRepository.deleteAll();
@@ -180,12 +80,18 @@ public class QuestionService {
         return finalQuestionResDtos;
     }
 
-//    public List<FinalQuestionResDto> getFinalQuestionsListByTopic(String topic) {
-//        List<FinalQuestionEntity> finalQuestionEntities = finalQuestionRepository.findAllByTopicEnum(topic);
-//        List<FinalQuestionResDto> finalQuestionResDtos = new ArrayList<>();
-//        finalQuestionEntities.forEach(entity -> finalQuestionResDtos.add(questionMapper.finalQuestionEntityToDto(entity)));
-//        return finalQuestionResDtos;
-//    }
+    public List<QuestionCreateResDto> allQuestionTemplatesByTopic(UUID topicUuid) {
+        Optional<TopicEntity> topicEntity = topicRepository.findById(topicUuid);
+
+        List<QuestionTemplateEntity> questionTemplates = questionTemplateRepository.findAllByTopicEntityListContaining(topicEntity);
+
+        List<QuestionCreateResDto> res = new ArrayList<>();
+        questionTemplates.forEach(template -> {
+            res.add(questionMapper.questionToDto(template));
+        });
+
+        return res;
+    }
 
     public List<TopicResDto> getAllTopics() {
         List<TopicEntity> topicEntities = topicRepository.findAll();

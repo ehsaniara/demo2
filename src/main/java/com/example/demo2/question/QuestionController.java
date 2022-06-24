@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -28,16 +29,15 @@ public class QuestionController {
     @DeleteMapping("/questionTemplates")
     public void deleteAllQuestionTemplates() { questionService.deleteAllFinalQuestionsAndQuestionTemplates();}
 
-//    //TODO
-//    @DeleteMapping("/questionTemplates/{id}")
-//    public void deleteSingleQuestionTemplateAndCorrespondingQuestions(
-//            @PathVariable(name = "id") UUID questionTemplateId
-//    ){}
-
-
     @GetMapping("/finalQuestions")
     public List<FinalQuestionResDto> getFinalQuestions() {
         return questionService.getFinalQuestionsList();
+    }
+
+    @GetMapping("/topics/{topicUuid}")
+    @ResponseBody
+    public List<QuestionCreateResDto> getQuestionsByTopic(@PathVariable UUID topicUuid) {
+        return questionService.allQuestionTemplatesByTopic(topicUuid);
     }
 
     @GetMapping("/topics")
@@ -50,8 +50,5 @@ public class QuestionController {
         return questionService.seedTopicRepository();
     }
 
-//    @GetMapping("/finalQuestions/{topic}")
-//    public List<FinalQuestionResDto> getFinalQuestionsByTopic(@PathVariable String topic) {
-//        return questionService.getFinalQuestionsListByTopic(topic);
-//    }
+
 }

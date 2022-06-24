@@ -17,6 +17,5 @@ public class QuestionCreateResDto {
     private UnitEnum unitEnum;
     private List<TopicEntity> topicEntityList;
     private String baseQuestion;
-    private String solutionEquation;
     private String solutionUnit;
 }
