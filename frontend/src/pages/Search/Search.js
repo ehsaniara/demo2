@@ -1,8 +1,19 @@
 import React from 'react'
 import './Search.css'
 import {loadingStatuses} from "../../loadingStatuses";
+import {serverURL} from "../../serverURL";
+import {useNavigate} from 'react-router-dom';
 
-export default function Search({units, topics, topicStatus}) {
+
+export default function Search({axios, setQuestions, units, topics, topicStatus}) {
+    const navigate = useNavigate();
+
+    const handleSearchByTopic = (topic) => {
+        axios.get(`${serverURL}/topics/${topic.topicUuid}`)
+            .then(res => setQuestions(res.data))
+            .then(()=> navigate('/search/topic/'))
+    }
+
     const renderCategories = () => {
         if (topicStatus === loadingStatuses.isLoading) {
             return <>loading</>
@@ -26,12 +37,16 @@ export default function Search({units, topics, topicStatus}) {
 
     const renderTopics = (unit) => {
         return topics.filter(topic => topic.unit === unit)
-            .map((topic) => <p key={topic.topicUuid} className="topic">{topic.topic}</p>)
+            .map((topic) =>
+                <div key={topic.topicUuid} className="topic">
+                    <p className="topic" onClick={() => handleSearchByTopic(topic)}>{topic.topic}</p>
+                </div>
+            )
     }
 
     return (
         <div className="search-body">
-        <h2>Physics Topics</h2>
+            <h2>Physics Topics</h2>
             <div>
                 {renderCategories()}
             </div>

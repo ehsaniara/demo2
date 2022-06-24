@@ -45,10 +45,8 @@ class QuestionServiceTest {
     }
 
     @Test
-    void createQuestionTemplate_savesQuestionTemplateAndFinalQuestions() {
+    void createQuestionTemplate_savesQuestionTemplate() {
         UUID uuid = UUID.randomUUID();
-        List<VariableDto> variables = new ArrayList<>();
-        variables.add(new VariableDto("H", 0d, 10d, 2d, new ArrayList<>()));
         List<TopicEntity> topicEntities = new ArrayList<>();
         topicEntities.add(TopicEntity.builder().topicEnum(TopicEnum.ACCELERATION).build());
 
@@ -56,17 +54,13 @@ class QuestionServiceTest {
                 UnitEnum.INTRO_TO_KINEMATICS,
                 topicEntities,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
-                "(&H& / 4.9) ** 0.5",
-                "sec",
-                variables
-
+                "sec"
         );
         QuestionTemplateEntity questionTemplateEntity = new QuestionTemplateEntity(
                 uuid,
                 UnitEnum.INTRO_TO_KINEMATICS,
                 topicEntities,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
-                "(&H& / 4.9) ** 0.5",
                 "sec"
         );
         QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
@@ -74,7 +68,6 @@ class QuestionServiceTest {
                 UnitEnum.INTRO_TO_KINEMATICS,
                 topicEntities,
                 "give a ball is dropped from a height of &H&m, how long will it take to hit the ground?",
-                "(&H& / 4.9) ** 0.5",
                 "sec"
         );
 
@@ -85,7 +78,6 @@ class QuestionServiceTest {
         QuestionCreateResDto resultQuestion = questionService.createQuestionTemplate(questionCreateDto);
 
         verify(questionTemplateRepository).save(any());
-        verify(finalQuestionRepository).saveAll(anyList());
         assertThat(resultQuestion).isNotNull();
     }
 
@@ -137,6 +129,14 @@ class QuestionServiceTest {
 
         assertThat(finalQuestionResDtos).isNotNull();
         verify(finalQuestionRepository).findAll();
+    }
+
+    @Test
+    void getAllBaseQuestionsWithTopic() {
+        List<QuestionCreateResDto> res = questionService.allQuestionTemplatesByTopic(UUID.randomUUID());
+
+        verify(topicRepository).findById(any(UUID.class));
+        verify(questionTemplateRepository).findAllByTopicEntityListContaining(any());
     }
 
 }
