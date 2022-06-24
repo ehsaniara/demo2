@@ -48,9 +48,6 @@ public class QuestionControllerTests {
 
     @Test
     void postQuestionTemplate_valid_returnsQuestionTemplate() throws Exception {
-
-        List<VariableDto> variables = new ArrayList<>();
-        variables.add(new VariableDto("H", 3d, 15d, 2d, null));
         List<TopicEntity> topicEntities = new ArrayList<>();
         topicEntities.add(TopicEntity.builder().topicEnum(TopicEnum.ACCELERATION).build());
 
@@ -58,16 +55,13 @@ public class QuestionControllerTests {
                 UnitEnum.INTRO_TO_KINEMATICS,
                 topicEntities,
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
-                "( H / 4.9 ) ^ 0.5 )",
-                "sec",
-                variables
+                "sec"
         );
         QuestionCreateResDto questionCreateResDto = new QuestionCreateResDto(
                 UUID.randomUUID(),
                 UnitEnum.INTRO_TO_KINEMATICS,
                 topicEntities,
                 "A ball is dropped from a height of ${H}m. How long will it take to hit the ground?",
-                "( H / 4.9 ) ^ 0.5 )",
                 "sec"
                 );
 
@@ -81,8 +75,6 @@ public class QuestionControllerTests {
 
     @Test
     void postQuestionTemplate_invalidParameters_returnBadRequest() throws Exception {
-        List<VariableDto> variables = new ArrayList<>();
-        variables.add(new VariableDto("H", 3d, 15d, 2d, null));
         List<TopicEntity> topicEntities = new ArrayList<>();
         topicEntities.add(TopicEntity.builder().topicEnum(TopicEnum.ACCELERATION).build());
 
@@ -90,9 +82,7 @@ public class QuestionControllerTests {
                 UnitEnum.INTRO_TO_KINEMATICS,
                 topicEntities,
                 null,
-                "( H / 4.9 ) ^ 0.5 )",
-                "sec",
-                variables
+                "sec"
         );
         when(questionService.createQuestionTemplate(questionCreateDto)).thenThrow(BadRequestException.class);
 
@@ -119,4 +109,17 @@ public class QuestionControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
+
+    @Test
+    void getListOfFinalQuestionsByTopic() throws Exception {
+        List<QuestionCreateResDto> questionList = new ArrayList<>();
+        UUID topicUuid = UUID.randomUUID();
+
+        when(questionService.allQuestionTemplatesByTopic(any())).thenReturn(questionList);
+
+        mockMvc.perform(get("/questionBank/topics/"+topicUuid))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
 }
