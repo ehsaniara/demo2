@@ -13,3 +13,11 @@
 .topics-container {
     margin: 1em;
 }
+
+.topic {
+    cursor: pointer;
+}
+
+.topic:hover {
+    color: #0D87BF;
+}
