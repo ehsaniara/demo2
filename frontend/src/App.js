@@ -5,6 +5,7 @@ import Home from './pages';
 import Search from "./pages/Search/Search";
 import AttemptSolution from "./pages/AttemptSolution/AttemptSolution";
 import SubmitQuestion from "./pages/SumbitQuestion/SubmitQuestion";
+import DisplayQuestions from "./pages/DisplayQuestions/DisplayQuestions";
 import {loadingStatuses} from "./loadingStatuses";
 import {serverURL} from "./serverURL";
 
@@ -12,6 +13,7 @@ export default function App({axios}) {
     const [topics, setTopics] = useState([])
     const [units, setUnits] = useState([])
     const [topicsStatus, setTopicsStatus] = useState(loadingStatuses.isLoading)
+    const [questions, setQuestions] = useState([])
 
     const getTopics = () => {
         axios.get(`${serverURL}/topics`)
@@ -48,7 +50,8 @@ export default function App({axios}) {
             <Navbar/>
             <Routes>
                 <Route exact path='/' element={<Home/>}/>
-                <Route path='/search' element={<Search axios={axios} units={units} topics={topics} topicStatus={topicsStatus}/>}/>
+                <Route path='/search/topic/' element={<DisplayQuestions questions={questions}/>}/>
+                <Route path='/search' element={<Search axios={axios} setQuestions={setQuestions} units={units} topics={topics} topicStatus={topicsStatus}/>}/>
                 <Route path='/attemptSolution' element={<AttemptSolution/>}/>
                 <Route path='/submitQuestion' element={<SubmitQuestion axios={axios} units={units} topics={topics}/>} topicStatus={topicsStatus}/>
             </Routes>
