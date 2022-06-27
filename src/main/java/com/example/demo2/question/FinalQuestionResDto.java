@@ -15,6 +15,4 @@ public class FinalQuestionResDto {
     private UUID finalQuestionUuid;
     private QuestionTemplateEntity questionTemplate;
     private String finalQuestion;
-    private String finalEquation;
-    private double result;
 }

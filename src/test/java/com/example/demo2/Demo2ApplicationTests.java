@@ -15,9 +15,9 @@ class Demo2ApplicationTests {
 	@Autowired
 	private QuestionService questionService;
 
-	@Test
-	void contextLoads() {
-		assertThat(questionService).isNotNull();
-	}
+//	@Test
+//	void contextLoads() {
+//		assertThat(questionService).isNotNull();
+//	}
 
 }
